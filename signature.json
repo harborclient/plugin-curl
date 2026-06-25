@@ -30,7 +30,7 @@
     },
     {
       "path": "screenshot.png",
-      "sha256": "d2b0e3f59c8af87847990dd5f6f66e622a1d62801d9b854ccd3121f8a9723844"
+      "sha256": "60c500a02d05001c98816be447f7511db09997e59b3f0befc43aaea0317aeab7"
     },
     {
       "path": "scripts/plugin-sign.ts",
@@ -39,6 +39,10 @@
     {
       "path": "scripts/plugin-verify.ts",
       "sha256": "7f1f2407a2a8fac287d88e18f48db22d926c7de656c06143dd7baf3f30898620"
+    },
+    {
+      "path": "scripts/screenshot-marketing.html",
+      "sha256": "8658f15d84048ce4950dbad4fe6b3b9bf5c8ae96762c9d49ae8970d14300594a"
     },
     {
       "path": "src/buildCurl.test.ts",
@@ -61,5 +65,5 @@
       "sha256": "03b3e2fda9bab0167f5734edc776215b8070552800bdee7778c5d561bfcc33d3"
     }
   ],
-  "signature": "FecLI7g/OOJg5FGM0JuzAaAfGiSfTa1idpY33TaJ88VYeip7ppZYD3VYa/XqqtcJvr44AxTJb63ACU3WKVa3Bw=="
+  "signature": "PQMWoPi5WsVDb+TkY2mz6RQzrf4QRC86RQte+OBXN2HdHXpXp8HYvtd6yX4hw8mLouMMYkNMHlJKPIs9iaWoDg=="
 }

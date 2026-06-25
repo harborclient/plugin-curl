@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      width: 706px;
+      height: 499px;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0a0e17;
+    }
+
+    .canvas {
+      position: relative;
+      width: 706px;
+      height: 499px;
+      background:
+        radial-gradient(ellipse 120% 80% at 85% 15%, rgba(56, 189, 248, 0.22) 0%, transparent 55%),
+        radial-gradient(ellipse 90% 70% at 10% 90%, rgba(99, 102, 241, 0.18) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 50% 50%, rgba(16, 185, 129, 0.06) 0%, transparent 60%),
+        linear-gradient(145deg, #0c1220 0%, #111827 45%, #0a0f1a 100%);
+    }
+
+    .grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, black 20%, transparent 75%);
+    }
+
+    .header {
+      position: absolute;
+      top: 18px;
+      left: 28px;
+      right: 28px;
+      z-index: 2;
+    }
+
+    .badge-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .plugin-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #7dd3fc;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .plugin-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #38bdf8;
+      box-shadow: 0 0 8px #38bdf8;
+    }
+
+    .feature-pills {
+      display: flex;
+      gap: 8px;
+    }
+
+    .pill {
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.15;
+      color: #f8fafc;
+      letter-spacing: -0.02em;
+    }
+
+    h1 span {
+      background: linear-gradient(90deg, #38bdf8, #818cf8, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      margin-top: 5px;
+      font-size: 12px;
+      color: #64748b;
+      max-width: 380px;
+      line-height: 1.35;
+    }
+
+    .mockup-wrap {
+      position: absolute;
+      top: 108px;
+      left: 28px;
+      right: 28px;
+      bottom: 20px;
+      z-index: 1;
+    }
+
+    .mockup-glow {
+      position: absolute;
+      inset: -8px -4px -4px -4px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(129, 140, 248, 0.15), rgba(52, 211, 153, 0.12));
+      filter: blur(18px);
+      opacity: 0.85;
+    }
+
+    .mockup {
+      position: relative;
+      height: 100%;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: #1a1f2e;
+      box-shadow:
+        0 24px 48px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mockup-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      background: #141824;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .traffic {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .traffic.r {
+      background: #ff5f57;
+    }
+
+    .traffic.y {
+      background: #febc2e;
+    }
+
+    .traffic.g {
+      background: #28c840;
+    }
+
+    .toolbar-title {
+      margin-left: 8px;
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      padding: 0 10px;
+      background: #161b28;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .tab {
+      padding: 7px 12px;
+      font-size: 11px;
+      color: #64748b;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab.active {
+      color: #e2e8f0;
+      border-bottom-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.06);
+    }
+
+    .request-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .method {
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: rgba(52, 211, 153, 0.15);
+      color: #34d399;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: ui-monospace, monospace;
+    }
+
+    .url {
+      flex: 1;
+      font-size: 11px;
+      color: #94a3b8;
+      font-family: ui-monospace, monospace;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .subtabs {
+      display: flex;
+      gap: 2px;
+      padding: 6px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .subtab {
+      padding: 4px 10px;
+      font-size: 10px;
+      color: #64748b;
+      border-radius: 4px;
+    }
+
+    .subtab.active {
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      font-weight: 600;
+    }
+
+    .curl-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 10px 12px 12px;
+      min-height: 0;
+    }
+
+    .curl-toolbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 8px;
+    }
+
+    .copy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #0ea5e9, #6366f1);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+    }
+
+    .copy-btn svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .code-box {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      background: #0f131c;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 10.5px;
+      line-height: 1.55;
+      color: #cbd5e1;
+      overflow: hidden;
+    }
+
+    .code-box .kw {
+      color: #38bdf8;
+    }
+
+    .code-box .flag {
+      color: #a78bfa;
+    }
+
+    .code-box .str {
+      color: #34d399;
+    }
+
+    .code-box .hdr {
+      color: #fbbf24;
+    }
+
+    .toast {
+      position: absolute;
+      top: 132px;
+      right: 42px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 20px rgba(52, 211, 153, 0.15);
+      z-index: 4;
+    }
+
+    .toast-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(52, 211, 153, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #34d399;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .toast-text {
+      font-size: 11px;
+      color: #e2e8f0;
+      font-weight: 500;
+    }
+
+    .accent-ring {
+      position: absolute;
+      top: 14px;
+      right: 22px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      opacity: 0.7;
+    }
+
+    .accent-ring::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border-radius: 50%;
+      border: 1px dashed rgba(129, 140, 248, 0.25);
+    }
+
+    .curl-icon {
+      position: absolute;
+      top: 38px;
+      right: 44px;
+      font-family: ui-monospace, monospace;
+      font-size: 28px;
+      font-weight: 700;
+      color: rgba(56, 189, 248, 0.12);
+      z-index: 0;
+      user-select: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="canvas">
+    <div class="grid"></div>
+    <div class="accent-ring"></div>
+    <div class="curl-icon">{ curl }</div>
+
+    <div class="header">
+      <div class="badge-row">
+        <div class="plugin-badge"><span class="dot"></span> HarborClient Plugin</div>
+        <div class="feature-pills">
+          <span class="pill">One-click copy</span>
+          <span class="pill">Live sync</span>
+          <span class="pill">Zero config</span>
+        </div>
+      </div>
+      <h1>Your request, as <span>cURL</span> — instantly</h1>
+      <p class="subtitle">Generate copy-ready curl commands from any HarborClient request. Share, debug, and automate in
+        seconds.</p>
+    </div>
+
+    <div class="mockup-wrap">
+      <div class="mockup-glow"></div>
+      <div class="mockup">
+        <div class="mockup-toolbar">
+          <span class="traffic r"></span>
+          <span class="traffic y"></span>
+          <span class="traffic g"></span>
+          <span class="toolbar-title">HarborClient — API Grant</span>
+        </div>
+        <div class="tab-bar">
+          <div class="tab">Params</div>
+          <div class="tab">Headers</div>
+          <div class="tab">Body</div>
+          <div class="tab active">cURL</div>
+        </div>
+        <div class="request-row">
+          <span class="method">POST</span>
+          <span class="url">https://api.example.com/v1/oauth/token</span>
+        </div>
+        <div class="curl-panel">
+          <div class="curl-toolbar">
+            <div class="copy-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
+              Copy
+            </div>
+          </div>
+          <div class="code-box">
+            <span class="kw">curl</span> <span class="flag">-X</span> POST \<br>
+            <span class="str">'https://api.example.com/v1/oauth/token'</span> \<br>
+            <span class="flag">-H</span> <span class="hdr">'Content-Type: application/json'</span> \<br>
+            <span class="flag">-H</span> <span class="hdr">'Authorization: Bearer ••••••••'</span> \<br>
+            <span class="flag">--data-raw</span> <span class="str">'{<br>
+              &nbsp;&nbsp;"grant_type": "client_credentials",<br>
+              &nbsp;&nbsp;"scope": "read write"<br>
+              }'</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast">
+      <div class="toast-icon">✓</div>
+      <span class="toast-text">Copied to clipboard</span>
+    </div>
+  </div>
+</body>
+
+</html>
