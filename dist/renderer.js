@@ -1,3 +1,38 @@
+// node_modules/.pnpm/@harborclient+plugin-api@file+..+harborclient-plugin-api_react@19.2.7/node_modules/@harborclient/plugin-api/dist/runtime/reactHost.js
+var hostReact = null;
+function setHostReact(react) {
+  hostReact = react;
+}
+function requireHostReact() {
+  if (hostReact == null) {
+    throw new Error(
+      "Plugin React host is not installed. Call installReact(hc.react) at the start of activate()."
+    );
+  }
+  return hostReact;
+}
+
+// node_modules/.pnpm/@harborclient+plugin-api@file+..+harborclient-plugin-api_react@19.2.7/node_modules/@harborclient/plugin-api/dist/runtime/index.js
+function installReact(react) {
+  setHostReact(react);
+}
+
+// node_modules/.pnpm/@harborclient+plugin-api@file+..+harborclient-plugin-api_react@19.2.7/node_modules/@harborclient/plugin-api/dist/runtime/react.js
+function hook(name) {
+  const react = requireHostReact();
+  const fn = react[name];
+  if (typeof fn !== "function") {
+    throw new Error(`React hook "${String(name)}" is not available on hc.react.`);
+  }
+  return fn;
+}
+function useState(initialState) {
+  return hook("useState")(initialState);
+}
+function useMemo(factory, deps) {
+  return hook("useMemo")(factory, deps);
+}
+
 // src/substitute.ts
 var VARIABLE_PATTERN = /\{\{\s*([\w.-]+)\s*\}\}/g;
 function substituteWithMap(text, runtimeVars) {
@@ -279,44 +314,49 @@ function buildCurlCommand(context) {
   return lines.join("\n");
 }
 
-// src/CurlTab.ts
-function createCurlTab(React) {
-  const { createElement: h, useMemo, useState } = React;
-  function CurlTab({
-    context,
-    showToast
-  }) {
-    const command = useMemo(() => buildCurlCommand(context), [context]);
-    const [copyError, setCopyError] = useState(null);
-    const handleCopy = async () => {
-      setCopyError(null);
-      try {
-        await navigator.clipboard.writeText(command);
-        showToast("Copied to clipboard");
-      } catch {
-        setCopyError("Failed to copy");
+// node_modules/.pnpm/@harborclient+plugin-api@file+..+harborclient-plugin-api_react@19.2.7/node_modules/@harborclient/plugin-api/dist/runtime/jsx-runtime.js
+var Fragment = Symbol.for("@harborclient/plugin-api.Fragment");
+function build(type, props, key) {
+  const react = requireHostReact();
+  const elementType = type === Fragment ? react.Fragment : type;
+  const { children, ...rest } = props ?? {};
+  if (key !== void 0) {
+    rest.key = key;
+  }
+  return react.createElement(elementType, rest, children);
+}
+var jsx = build;
+var jsxs = build;
+
+// src/CurlTab.tsx
+function CurlTab({ context, showToast }) {
+  const command = useMemo(() => buildCurlCommand(context), [context]);
+  const [copyError, setCopyError] = useState(null);
+  const handleCopy = async () => {
+    setCopyError(null);
+    try {
+      await navigator.clipboard.writeText(command);
+      showToast("Copied to clipboard");
+    } catch {
+      setCopyError("Failed to copy");
+    }
+  };
+  return /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-2", style: { minHeight: "320px" }, children: [
+    /* @__PURE__ */ jsx("div", { className: "flex shrink-0 items-center justify-end", children: /* @__PURE__ */ jsx(
+      "button",
+      {
+        type: "button",
+        className: "rounded-md bg-control px-3 py-1.5 text-[14px] text-text hover:bg-control-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
+        "aria-label": "Copy cURL command",
+        onClick: () => {
+          void handleCopy();
+        },
+        children: "Copy"
       }
-    };
-    return h(
-      "div",
-      { className: "flex flex-col gap-2", style: { minHeight: "320px" } },
-      h(
-        "div",
-        { className: "flex shrink-0 items-center justify-end" },
-        h(
-          "button",
-          {
-            type: "button",
-            className: "rounded-md bg-control px-3 py-1.5 text-[14px] text-text hover:bg-control-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
-            "aria-label": "Copy cURL command",
-            onClick: () => {
-              void handleCopy();
-            }
-          },
-          "Copy"
-        )
-      ),
-      h("textarea", {
+    ) }),
+    /* @__PURE__ */ jsx(
+      "textarea",
+      {
         readOnly: true,
         rows: 14,
         "aria-label": "cURL command",
@@ -325,32 +365,29 @@ function createCurlTab(React) {
         className: "w-full flex-1 resize-y rounded-md border border-separator bg-control p-3 font-mono text-[14px] text-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
         style: { minHeight: "280px", width: "100%" },
         value: command
-      }),
-      copyError != null ? h(
-        "p",
-        {
-          id: "curl-copy-error",
-          className: "text-[14px] text-danger",
-          role: "status"
-        },
-        copyError
-      ) : null
-    );
-  }
-  return CurlTab;
+      }
+    ),
+    copyError != null ? /* @__PURE__ */ jsx(
+      "p",
+      {
+        id: "curl-copy-error",
+        className: "text-[14px] text-danger",
+        role: "status",
+        children: copyError
+      }
+    ) : null
+  ] });
 }
 
-// src/renderer.ts
+// src/renderer.tsx
 function activate(hc) {
-  const showToast = hc.ui.showToast.bind(hc.ui);
-  const CurlTab = createCurlTab(hc.react);
-  const { createElement: h } = hc.react;
+  installReact(hc.react);
   hc.subscriptions.push(
     hc.ui.registerRequestTab({
       id: "curl",
       title: "cURL",
       order: 45,
-      Component: ({ context }) => h(CurlTab, { context, showToast })
+      Component: ({ context }) => /* @__PURE__ */ jsx(CurlTab, { context, hc })
     })
   );
 }

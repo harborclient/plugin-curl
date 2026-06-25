@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@harborclient/plugin-api':
-        specifier: ^0.2.2
-        version: 0.2.2(react@19.2.7)
+        specifier: file:../harborclient-plugin-api
+        version: file:../harborclient-plugin-api(react@19.2.7)
       '@types/react':
         specifier: ^19.1.2
         version: 19.2.17
@@ -338,8 +338,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@harborclient/plugin-api@0.2.2':
-    resolution: {integrity: sha512-dRooIukUGpGCUfIe4kuLTKURetaN7sU7vrxr5lFCKN839sYNS9IC8fs9qUzASAy23jYxXGpF8wWszoajRrky9g==}
+  '@harborclient/plugin-api@file:../harborclient-plugin-api':
+    resolution: {directory: ../harborclient-plugin-api, type: directory}
     peerDependencies:
       react: '>=18'
 
@@ -901,7 +901,7 @@ snapshots:
   '@esbuild/win32-x64@0.27.7':
     optional: true
 
-  '@harborclient/plugin-api@0.2.2(react@19.2.7)':
+  '@harborclient/plugin-api@file:../harborclient-plugin-api(react@19.2.7)':
     dependencies:
       react: 19.2.7
 
