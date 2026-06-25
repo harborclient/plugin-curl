@@ -1,6 +1,6 @@
 {
   "name": "harborclient-plugin-curl",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "scripts": {
     "build": "esbuild src/renderer.tsx --bundle --outfile=dist/renderer.js --format=esm --jsx=automatic --jsx-import-source=@harborclient/plugin-api --external:react --external:react-dom",
@@ -11,7 +11,7 @@
     "plugin:verify": "node --experimental-strip-types scripts/plugin-verify.ts"
   },
   "devDependencies": {
-    "@harborclient/plugin-api": "^0.4.2",
+    "@harborclient/sdk": "^0.4.3",
     "@types/node": "^26.0.1",
     "@types/react": "^19.1.2",
     "esbuild": "^0.25.0",
