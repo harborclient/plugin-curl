@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "pluginId": "com.harborclient.plugins.curl",
+  "pluginVersion": "1.0.0",
+  "algorithm": "Ed25519",
+  "files": [
+    {
+      "path": ".gitignore",
+      "sha256": "dba27c31aad935787bb275c3e5e4e957708f15386de599eff1db476022cd7e4c"
+    },
+    {
+      "path": "dist/renderer.js",
+      "sha256": "a6223a8361d19ca1e69a3e24d90ae93b29c4fa3c8dc9c79caef14c68ed15360f"
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "143a10cb2c7f76bb52319560ce189c392af7cb6b3d98d30788b0922d1fe6d6f1"
+    },
+    {
+      "path": "package.json",
+      "sha256": "2fa615caffbe07355a9b6102e858887823fb449f361bc9b7196c96f9450338bb"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "fc226f54dd3a8d6d70f53f041432256cbddd30343f343f19764e2b21d2c7972b"
+    },
+    {
+      "path": "README.md",
+      "sha256": "8fdfcccaa833ef3745ce0125873c66036104d62a4cf929972f81bebd5b00056f"
+    },
+    {
+      "path": "screenshot.png",
+      "sha256": "d2b0e3f59c8af87847990dd5f6f66e622a1d62801d9b854ccd3121f8a9723844"
+    },
+    {
+      "path": "scripts/plugin-sign.ts",
+      "sha256": "6646535c3a65cbcdc0f22e9176025e0f1eed4f48143ef4950e085dae06cad2c1"
+    },
+    {
+      "path": "scripts/plugin-verify.ts",
+      "sha256": "7f1f2407a2a8fac287d88e18f48db22d926c7de656c06143dd7baf3f30898620"
+    },
+    {
+      "path": "src/buildCurl.test.ts",
+      "sha256": "60bf80af9f9a5702a475f575abb654ef19e1dc3ef103c9cc79a7e6006b3a2623"
+    },
+    {
+      "path": "src/buildCurl.ts",
+      "sha256": "4bb095565754ce7a9ee9889fe86bf5e1d479dd37b30c718fcd46381d0bb3aee3"
+    },
+    {
+      "path": "src/CurlTab.tsx",
+      "sha256": "c8cf296d6c436c75b5230cb027a78bc4cc9c3e054409e06544c5b32f3cddc45f"
+    },
+    {
+      "path": "src/renderer.tsx",
+      "sha256": "9946cecd13a0f48e65d01c0807dd423874696026783bf787e29e0c52ebdf4eb9"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "03b3e2fda9bab0167f5734edc776215b8070552800bdee7778c5d561bfcc33d3"
+    }
+  ],
+  "signature": "69BNUF3TPDq5LJ7VzRIiSImSt57wgMj7/+LGfjv7X2U8SwXMQqR6GNvVjszbXFh2124XeTnCw05zAJXMVnwDBA=="
+}

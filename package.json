@@ -6,10 +6,13 @@
     "build": "esbuild src/renderer.tsx --bundle --outfile=dist/renderer.js --format=esm --jsx=automatic --jsx-import-source=@harborclient/plugin-api --external:react --external:react-dom",
     "dev": "esbuild src/renderer.tsx --bundle --outfile=dist/renderer.js --format=esm --jsx=automatic --jsx-import-source=@harborclient/plugin-api --external:react --external:react-dom --watch",
     "test": "vitest run",
-    "pack": "pnpm build && zip -r ../harborclient-plugin-curl.hcp manifest.json README.md dist"
+    "pack": "pnpm build && zip -r ../harborclient-plugin-curl.hcp manifest.json README.md dist",
+    "plugin:sign": "node --experimental-strip-types scripts/plugin-sign.ts",
+    "plugin:verify": "node --experimental-strip-types scripts/plugin-verify.ts"
   },
   "devDependencies": {
-    "@harborclient/plugin-api": "^0.3.2",
+    "@harborclient/plugin-api": "^0.4.2",
+    "@types/node": "^26.0.1",
     "@types/react": "^19.1.2",
     "esbuild": "^0.25.0",
     "typescript": "^5.8.3",
