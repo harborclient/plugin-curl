@@ -9,7 +9,7 @@
     "pack": "pnpm build && zip -r ../harborclient-plugin-curl.hcp manifest.json README.md dist"
   },
   "devDependencies": {
-    "@harborclient/plugin-api": "^0.3.0",
+    "@harborclient/plugin-api": "^0.3.2",
     "@types/react": "^19.1.2",
     "esbuild": "^0.25.0",
     "typescript": "^5.8.3",

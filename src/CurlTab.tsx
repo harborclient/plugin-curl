@@ -1,5 +1,9 @@
 import { useMemo, useState } from "@harborclient/plugin-api/react";
-import type { RequestTabContext } from "@harborclient/plugin-api";
+import type {
+  PluginContext,
+  RequestTabContext,
+} from "@harborclient/plugin-api";
+import { copyToClipboard } from "@harborclient/plugin-api/clipboard";
 import { buildCurlCommand } from "./buildCurl";
 
 interface Props {
@@ -9,15 +13,15 @@ interface Props {
   context: RequestTabContext;
 
   /**
-   * Shows non-blocking success feedback after copy.
+   * Renderer plugin context for clipboard and toast feedback.
    */
-  showToast: (message: string) => void;
+  hc: PluginContext;
 }
 
 /**
  * Displays the equivalent curl command for the active request with a copy action.
  */
-export function CurlTab({ context, showToast }: Props) {
+export function CurlTab({ context, hc }: Props) {
   /**
    * Equivalent curl command derived from the active request context.
    */
@@ -31,8 +35,7 @@ export function CurlTab({ context, showToast }: Props) {
   const handleCopy = async (): Promise<void> => {
     setCopyError(null);
     try {
-      await navigator.clipboard.writeText(command);
-      showToast("Copied to clipboard");
+      await copyToClipboard(hc, command, { toast: "Copied to clipboard" });
     } catch {
       setCopyError("Failed to copy");
     }

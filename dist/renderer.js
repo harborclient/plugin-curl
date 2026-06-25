@@ -1,4 +1,4 @@
-// node_modules/.pnpm/@harborclient+plugin-api@0.3.0_react@19.2.7/node_modules/@harborclient/plugin-api/dist/runtime/reactHost.js
+// node_modules/.pnpm/@harborclient+plugin-api@0.3.2_react@19.2.7/node_modules/@harborclient/plugin-api/dist/runtime/reactHost.js
 var hostReact = null;
 function setHostReact(react) {
   hostReact = react;
@@ -12,12 +12,12 @@ function requireHostReact() {
   return hostReact;
 }
 
-// node_modules/.pnpm/@harborclient+plugin-api@0.3.0_react@19.2.7/node_modules/@harborclient/plugin-api/dist/runtime/index.js
+// node_modules/.pnpm/@harborclient+plugin-api@0.3.2_react@19.2.7/node_modules/@harborclient/plugin-api/dist/runtime/index.js
 function installReact(react) {
   setHostReact(react);
 }
 
-// node_modules/.pnpm/@harborclient+plugin-api@0.3.0_react@19.2.7/node_modules/@harborclient/plugin-api/dist/runtime/react.js
+// node_modules/.pnpm/@harborclient+plugin-api@0.3.2_react@19.2.7/node_modules/@harborclient/plugin-api/dist/runtime/react.js
 function hook(name) {
   const react = requireHostReact();
   const fn = react[name];
@@ -33,9 +33,17 @@ function useMemo(factory, deps) {
   return hook("useMemo")(factory, deps);
 }
 
-// src/substitute.ts
+// node_modules/.pnpm/@harborclient+plugin-api@0.3.2_react@19.2.7/node_modules/@harborclient/plugin-api/dist/clipboard.js
+async function copyToClipboard(hc, text, options) {
+  await navigator.clipboard.writeText(text);
+  if (options?.toast) {
+    hc.ui.showToast(options.toast, { duration: options.duration });
+  }
+}
+
+// node_modules/.pnpm/@harborclient+plugin-api@0.3.2_react@19.2.7/node_modules/@harborclient/plugin-api/dist/http/substitute.js
 var VARIABLE_PATTERN = /\{\{\s*([\w.-]+)\s*\}\}/g;
-function substituteWithMap(text, runtimeVars) {
+function substituteVariables(text, runtimeVars) {
   return text.replace(VARIABLE_PATTERN, (match, key) => {
     const value = runtimeVars[key];
     return value !== void 0 ? value : match;
@@ -56,11 +64,11 @@ function resolveAuthVariables(auth, substitute) {
 function substituteKeyValueRows(rows, runtimeVars) {
   return rows.map((row) => ({
     ...row,
-    value: substituteWithMap(row.value, runtimeVars)
+    value: substituteVariables(row.value, runtimeVars)
   }));
 }
 
-// src/buildCurl.ts
+// node_modules/.pnpm/@harborclient+plugin-api@0.3.2_react@19.2.7/node_modules/@harborclient/plugin-api/dist/http/resolveRequest.js
 function hasUnsafeHeaderFieldChars(value) {
   for (let index = 0; index < value.length; index += 1) {
     const code = value.charCodeAt(index);
@@ -72,12 +80,15 @@ function hasUnsafeHeaderFieldChars(value) {
 }
 function encodeBasicAuth(username, password) {
   const credential = `${username}:${password}`;
-  const bytes = new TextEncoder().encode(credential);
-  let binary = "";
-  for (const byte of bytes) {
-    binary += String.fromCharCode(byte);
+  if (typeof TextEncoder !== "undefined" && typeof globalThis.btoa === "function") {
+    const bytes = new TextEncoder().encode(credential);
+    let binary = "";
+    for (const byte of bytes) {
+      binary += String.fromCharCode(byte);
+    }
+    return globalThis.btoa(binary);
   }
-  return globalThis.btoa(binary);
+  return globalThis.btoa?.(credential) ?? credential;
 }
 function buildAuthHeaderValue(auth) {
   if (auth.type === "none") {
@@ -102,11 +113,7 @@ function isRootRelativePath(url) {
 }
 function appendQueryFallback(trimmed, enabledParams) {
   const separator = trimmed.includes("?") ? "&" : "?";
-  const query = enabledParams.map(
-    (param) => `${encodeURIComponent(param.key.trim())}=${encodeURIComponent(
-      param.value
-    )}`
-  ).join("&");
+  const query = enabledParams.map((param) => `${encodeURIComponent(param.key.trim())}=${encodeURIComponent(param.value)}`).join("&");
   return `${trimmed}${separator}${query}`;
 }
 function buildUrl(baseUrl, params) {
@@ -114,9 +121,7 @@ function buildUrl(baseUrl, params) {
   if (!trimmed) {
     return trimmed;
   }
-  const enabledParams = params.filter(
-    (param) => param.enabled && param.key.trim()
-  );
+  const enabledParams = params.filter((param) => param.enabled && param.key.trim());
   if (enabledParams.length === 0) {
     return trimmed;
   }
@@ -140,9 +145,7 @@ function enabledRows(rows) {
   return rows.filter((row) => row.enabled && row.key.trim());
 }
 function hasManualAuthorization(rows) {
-  return enabledRows(rows).some(
-    (row) => row.key.trim().toLowerCase() === "authorization" && row.value.trim() !== ""
-  );
+  return enabledRows(rows).some((row) => row.key.trim().toLowerCase() === "authorization" && row.value.trim() !== "");
 }
 function buildHeaders(draft, collectionHeaders, authValue) {
   const mergedRows = [
@@ -158,9 +161,7 @@ function buildHeaders(draft, collectionHeaders, authValue) {
     }
     result[key] = header.value;
   }
-  const hasContentType = Object.keys(result).some(
-    (key) => key.toLowerCase() === "content-type"
-  );
+  const hasContentType = Object.keys(result).some((key) => key.toLowerCase() === "content-type");
   if (!hasContentType) {
     if (draft.body_type === "json") {
       result["Content-Type"] = "application/json";
@@ -171,6 +172,44 @@ function buildHeaders(draft, collectionHeaders, authValue) {
     }
   }
   return result;
+}
+function resolveRequest(context) {
+  const { draft, collectionAuth, collectionHeaders, variables } = context;
+  const substitute = (text) => substituteVariables(text, variables);
+  const resolvedDraft = {
+    ...draft,
+    url: substitute(draft.url),
+    body: substitute(draft.body),
+    params: substituteKeyValueRows(draft.params, variables),
+    headers: substituteKeyValueRows(draft.headers, variables),
+    auth: resolveAuthVariables(draft.auth, substitute)
+  };
+  const resolvedCollectionHeaders = substituteKeyValueRows(collectionHeaders, variables);
+  const resolvedCollectionAuth = resolveAuthVariables(collectionAuth, substitute);
+  const effectiveAuth = resolvedDraft.auth.type !== "none" ? resolvedDraft.auth : resolvedCollectionAuth;
+  const authValue = buildAuthHeaderValue(effectiveAuth);
+  const url = buildUrl(resolvedDraft.url, resolvedDraft.params);
+  const headers = buildHeaders(resolvedDraft, resolvedCollectionHeaders, authValue);
+  return {
+    method: resolvedDraft.method,
+    url,
+    headers,
+    body: resolvedDraft.body
+  };
+}
+
+// src/buildCurl.ts
+function shellQuote(value) {
+  return `'${value.replace(/'/g, `'\\''`)}'`;
+}
+function appendSegment(lines, segment) {
+  if (lines.length === 0) {
+    lines.push(`curl ${segment}`);
+    return;
+  }
+  const lastIndex = lines.length - 1;
+  lines[lastIndex] = `${lines[lastIndex]} \\`;
+  lines.push(`  ${segment}`);
 }
 function parseUrlEncodedParts(body) {
   const trimmed = body.trim();
@@ -220,18 +259,6 @@ function parseFormParts(body) {
     return [];
   }
 }
-function shellQuote(value) {
-  return `'${value.replace(/'/g, `'\\''`)}'`;
-}
-function appendSegment(lines, segment) {
-  if (lines.length === 0) {
-    lines.push(`curl ${segment}`);
-    return;
-  }
-  const lastIndex = lines.length - 1;
-  lines[lastIndex] = `${lines[lastIndex]} \\`;
-  lines.push(`  ${segment}`);
-}
 function appendUrlEncodedBody(body, lines) {
   const rows = parseUrlEncodedParts(body).filter(
     (row) => row.enabled && row.key.trim()
@@ -276,45 +303,25 @@ function appendBodyFlags(draft, lines) {
   appendSegment(lines, `--data-raw ${shellQuote(draft.body)}`);
 }
 function buildCurlCommand(context) {
-  const { draft, collectionAuth, collectionHeaders, variables } = context;
-  const substitute = (text) => substituteWithMap(text, variables);
-  const resolvedDraft = {
-    ...draft,
-    url: substitute(draft.url),
-    body: substitute(draft.body),
-    params: substituteKeyValueRows(draft.params, variables),
-    headers: substituteKeyValueRows(draft.headers, variables),
-    auth: resolveAuthVariables(draft.auth, substitute)
+  const resolved = resolveRequest(context);
+  const draftForBody = {
+    ...context.draft,
+    body: resolved.body,
+    method: resolved.method
   };
-  const resolvedCollectionHeaders = substituteKeyValueRows(
-    collectionHeaders,
-    variables
-  );
-  const resolvedCollectionAuth = resolveAuthVariables(
-    collectionAuth,
-    substitute
-  );
-  const effectiveAuth = resolvedDraft.auth.type !== "none" ? resolvedDraft.auth : resolvedCollectionAuth;
-  const authValue = buildAuthHeaderValue(effectiveAuth);
-  const url = buildUrl(resolvedDraft.url, resolvedDraft.params);
-  const headers = buildHeaders(
-    resolvedDraft,
-    resolvedCollectionHeaders,
-    authValue
-  );
   const lines = [];
-  if (resolvedDraft.method.toUpperCase() !== "GET") {
-    appendSegment(lines, `-X ${resolvedDraft.method.toUpperCase()}`);
+  if (resolved.method.toUpperCase() !== "GET") {
+    appendSegment(lines, `-X ${resolved.method.toUpperCase()}`);
   }
-  appendSegment(lines, shellQuote(url));
-  for (const [key, value] of Object.entries(headers)) {
+  appendSegment(lines, shellQuote(resolved.url));
+  for (const [key, value] of Object.entries(resolved.headers)) {
     appendSegment(lines, `-H ${shellQuote(`${key}: ${value}`)}`);
   }
-  appendBodyFlags(resolvedDraft, lines);
+  appendBodyFlags(draftForBody, lines);
   return lines.join("\n");
 }
 
-// node_modules/.pnpm/@harborclient+plugin-api@0.3.0_react@19.2.7/node_modules/@harborclient/plugin-api/dist/runtime/jsx-runtime.js
+// node_modules/.pnpm/@harborclient+plugin-api@0.3.2_react@19.2.7/node_modules/@harborclient/plugin-api/dist/runtime/jsx-runtime.js
 var Fragment = Symbol.for("@harborclient/plugin-api.Fragment");
 function build(type, props, key) {
   const react = requireHostReact();
@@ -329,14 +336,13 @@ var jsx = build;
 var jsxs = build;
 
 // src/CurlTab.tsx
-function CurlTab({ context, showToast }) {
+function CurlTab({ context, hc }) {
   const command = useMemo(() => buildCurlCommand(context), [context]);
   const [copyError, setCopyError] = useState(null);
   const handleCopy = async () => {
     setCopyError(null);
     try {
-      await navigator.clipboard.writeText(command);
-      showToast("Copied to clipboard");
+      await copyToClipboard(hc, command, { toast: "Copied to clipboard" });
     } catch {
       setCopyError("Failed to copy");
     }
