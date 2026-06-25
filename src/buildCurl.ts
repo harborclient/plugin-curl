@@ -1,5 +1,5 @@
-import type { RequestDraft, RequestTabContext } from "@harborclient/plugin-api";
-import { resolveRequest } from "@harborclient/plugin-api/http";
+import type { RequestDraft, RequestTabContext } from "@harborclient/sdk";
+import { resolveRequest } from "@harborclient/sdk/http";
 
 type KeyValue = { key: string; value: string; enabled: boolean };
 
@@ -90,8 +90,8 @@ function parseFormParts(body: string): FormDataPart[] {
         type: record.type === "file" ? "file" : "text",
         files: Array.isArray(record.files)
           ? record.files.filter(
-              (file): file is string => typeof file === "string"
-            )
+            (file): file is string => typeof file === "string"
+          )
           : [],
       };
     });

@@ -4,7 +4,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
-    "jsxImportSource": "@harborclient/plugin-api",
+    "jsxImportSource": "@harborclient/sdk",
     "strict": true,
     "skipLibCheck": true,
     "noEmit": true,

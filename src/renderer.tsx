@@ -1,11 +1,11 @@
-import { installReact } from "@harborclient/plugin-api";
-import type { PluginContext } from "@harborclient/plugin-api";
+import { installReact } from "@harborclient/sdk";
+import type { PluginContext } from "@harborclient/sdk";
 import { CurlTab } from "./CurlTab";
 
 /**
  * Registers the cURL request editor tab when the plugin activates.
  *
- * @param hc - Plugin API surface from HarborClient.
+ * @param hc - SDK surface from HarborClient.
  */
 export function activate(hc: PluginContext): void {
   installReact(hc.react);

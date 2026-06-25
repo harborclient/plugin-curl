@@ -1,7 +1,7 @@
-import { runSignCli } from "@harborclient/plugin-api/signing";
+import { runSignCli } from "@harborclient/sdk/signing";
 
 /**
- * Delegates to the plugin-api signing CLI.
+ * Delegates to the SDK signing CLI.
  */
 const exitCode = await runSignCli(process.argv);
 process.exit(exitCode);

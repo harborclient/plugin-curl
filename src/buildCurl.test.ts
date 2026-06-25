@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { RequestTabContext } from "@harborclient/plugin-api";
+import type { RequestTabContext } from "@harborclient/sdk";
 import { buildCurlCommand } from "./buildCurl";
 
 /**

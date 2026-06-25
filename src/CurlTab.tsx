@@ -1,9 +1,9 @@
-import { useMemo, useState } from "@harborclient/plugin-api/react";
+import { useMemo, useState } from "@harborclient/sdk/react";
 import type {
   PluginContext,
   RequestTabContext,
-} from "@harborclient/plugin-api";
-import { copyToClipboard } from "@harborclient/plugin-api/clipboard";
+} from "@harborclient/sdk";
+import { copyToClipboard } from "@harborclient/sdk/clipboard";
 import { buildCurlCommand } from "./buildCurl";
 
 interface Props {
