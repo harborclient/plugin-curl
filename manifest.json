@@ -1,0 +1,11 @@
+{
+  "id": "com.harborclient.plugins.curl",
+  "name": "cURL",
+  "version": "1.0.0",
+  "engines": { "harborclient": ">=1.8.0" },
+  "renderer": "dist/renderer.js",
+  "permissions": ["ui"],
+  "contributes": {
+    "requestTabs": [{ "id": "curl", "title": "cURL" }]
+  }
+}

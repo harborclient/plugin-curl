@@ -1,0 +1,18 @@
+{
+  "name": "harborclient-plugin-curl",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/renderer.ts --bundle --outfile=dist/renderer.js --format=esm",
+    "dev": "esbuild src/renderer.ts --bundle --outfile=dist/renderer.js --format=esm --watch",
+    "test": "vitest run",
+    "pack": "pnpm build && zip -r ../harborclient-plugin-curl.hcp manifest.json README.md dist"
+  },
+  "devDependencies": {
+    "@harborclient/plugin-api": "file:../harborclient-plugin-api",
+    "@types/react": "^19.1.2",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}
