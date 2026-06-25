@@ -3,6 +3,11 @@ import type {
   RequestDraft,
   RequestTabContext,
 } from "@harborclient/plugin-api";
+import {
+  resolveAuthVariables,
+  substituteKeyValueRows,
+  substituteWithMap,
+} from "./substitute";
 
 type KeyValue = { key: string; value: string; enabled: boolean };
 
@@ -174,7 +179,7 @@ function buildHeaders(
 ): Record<string, string> {
   const mergedRows = [
     ...(authValue &&
-    !hasManualAuthorization([...collectionHeaders, ...draft.headers])
+      !hasManualAuthorization([...collectionHeaders, ...draft.headers])
       ? [{ key: "Authorization", value: authValue, enabled: true }]
       : []),
     ...collectionHeaders,
@@ -263,8 +268,8 @@ function parseFormParts(body: string): FormDataPart[] {
         type: record.type === "file" ? "file" : "text",
         files: Array.isArray(record.files)
           ? record.files.filter(
-              (file): file is string => typeof file === "string"
-            )
+            (file): file is string => typeof file === "string"
+          )
           : [],
       };
     });
@@ -372,16 +377,42 @@ function appendBodyFlags(draft: RequestDraft, lines: string[]): void {
  * @param context - Read-only request tab context from HarborClient.
  */
 export function buildCurlCommand(context: RequestTabContext): string {
-  const { draft, collectionAuth, collectionHeaders } = context;
+  const { draft, collectionAuth, collectionHeaders, variables } = context;
+  const substitute = (text: string): string =>
+    substituteWithMap(text, variables);
+
+  const resolvedDraft: RequestDraft = {
+    ...draft,
+    url: substitute(draft.url),
+    body: substitute(draft.body),
+    params: substituteKeyValueRows(draft.params, variables),
+    headers: substituteKeyValueRows(draft.headers, variables),
+    auth: resolveAuthVariables(draft.auth, substitute),
+  };
+  const resolvedCollectionHeaders = substituteKeyValueRows(
+    collectionHeaders,
+    variables
+  );
+  const resolvedCollectionAuth = resolveAuthVariables(
+    collectionAuth,
+    substitute
+  );
+
   const effectiveAuth =
-    draft.auth.type !== "none" ? draft.auth : collectionAuth;
+    resolvedDraft.auth.type !== "none"
+      ? resolvedDraft.auth
+      : resolvedCollectionAuth;
   const authValue = buildAuthHeaderValue(effectiveAuth);
-  const url = buildUrl(draft.url, draft.params);
-  const headers = buildHeaders(draft, collectionHeaders, authValue);
+  const url = buildUrl(resolvedDraft.url, resolvedDraft.params);
+  const headers = buildHeaders(
+    resolvedDraft,
+    resolvedCollectionHeaders,
+    authValue
+  );
   const lines: string[] = [];
 
-  if (draft.method.toUpperCase() !== "GET") {
-    appendSegment(lines, `-X ${draft.method.toUpperCase()}`);
+  if (resolvedDraft.method.toUpperCase() !== "GET") {
+    appendSegment(lines, `-X ${resolvedDraft.method.toUpperCase()}`);
   }
 
   appendSegment(lines, shellQuote(url));
@@ -390,7 +421,7 @@ export function buildCurlCommand(context: RequestTabContext): string {
     appendSegment(lines, `-H ${shellQuote(`${key}: ${value}`)}`);
   }
 
-  appendBodyFlags(draft, lines);
+  appendBodyFlags(resolvedDraft, lines);
 
   return lines.join("\n");
 }

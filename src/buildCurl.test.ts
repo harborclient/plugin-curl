@@ -19,6 +19,7 @@ function sampleContext(
       bearer: { token: "" },
     },
     collectionHeaders: [],
+    variables: {},
     draft: {
       method: "GET",
       url: "https://example.com",
@@ -40,6 +41,7 @@ function sampleContext(
     draft: { ...base.draft, ...overrides.draft },
     collectionAuth: overrides.collectionAuth ?? base.collectionAuth,
     collectionHeaders: overrides.collectionHeaders ?? base.collectionHeaders,
+    variables: overrides.variables ?? base.variables,
   };
 }
 
@@ -223,5 +225,61 @@ describe("buildCurlCommand", () => {
     expect(multipart).toContain("-F 'note=hi'");
     expect(multipart).toContain("-F 'file=@/tmp/upload.bin'");
     expect(multipart).not.toContain("Content-Type");
+  });
+
+  it("substitutes collection and environment variables in url, auth, and body", () => {
+    const command = buildCurlCommand(
+      sampleContext({
+        variables: {
+          baseUrl: "https://api.example.com",
+          apiBase: "/v1",
+          idToken: "token-abc",
+          apiKey: "key-123",
+          apiSecret: "secret-456",
+        },
+        draft: {
+          method: "POST",
+          url: "{{baseUrl}}{{apiBase}}/auth/apiGrant",
+          params: [],
+          headers: [],
+          body: '{\n  "key": "{{apiKey}}",\n  "secret": "{{apiSecret}}"\n}',
+          body_type: "json",
+          auth: {
+            type: "bearer",
+            basic: { username: "", password: "" },
+            bearer: { token: "{{idToken}}" },
+          },
+        },
+      })
+    );
+
+    expect(command).toContain("'https://api.example.com/v1/auth/apiGrant'");
+    expect(command).toContain("'Authorization: Bearer token-abc'");
+    expect(command).toContain('"key": "key-123"');
+    expect(command).toContain('"secret": "secret-456"');
+    expect(command).not.toContain("{{");
+  });
+
+  it("leaves unknown variable placeholders literal", () => {
+    const command = buildCurlCommand(
+      sampleContext({
+        variables: { known: "resolved" },
+        draft: {
+          method: "GET",
+          url: "https://example.com/{{known}}/{{missing}}",
+          params: [],
+          headers: [],
+          body: "",
+          body_type: "none",
+          auth: {
+            type: "none",
+            basic: { username: "", password: "" },
+            bearer: { token: "" },
+          },
+        },
+      })
+    );
+
+    expect(command).toContain("'https://example.com/resolved/{{missing}}'");
   });
 });

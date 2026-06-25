@@ -1,3 +1,30 @@
+// src/substitute.ts
+var VARIABLE_PATTERN = /\{\{\s*([\w.-]+)\s*\}\}/g;
+function substituteWithMap(text, runtimeVars) {
+  return text.replace(VARIABLE_PATTERN, (match, key) => {
+    const value = runtimeVars[key];
+    return value !== void 0 ? value : match;
+  });
+}
+function resolveAuthVariables(auth, substitute) {
+  return {
+    ...auth,
+    basic: {
+      username: substitute(auth.basic.username),
+      password: substitute(auth.basic.password)
+    },
+    bearer: {
+      token: substitute(auth.bearer.token)
+    }
+  };
+}
+function substituteKeyValueRows(rows, runtimeVars) {
+  return rows.map((row) => ({
+    ...row,
+    value: substituteWithMap(row.value, runtimeVars)
+  }));
+}
+
 // src/buildCurl.ts
 function hasUnsafeHeaderFieldChars(value) {
   for (let index = 0; index < value.length; index += 1) {
@@ -214,20 +241,41 @@ function appendBodyFlags(draft, lines) {
   appendSegment(lines, `--data-raw ${shellQuote(draft.body)}`);
 }
 function buildCurlCommand(context) {
-  const { draft, collectionAuth, collectionHeaders } = context;
-  const effectiveAuth = draft.auth.type !== "none" ? draft.auth : collectionAuth;
+  const { draft, collectionAuth, collectionHeaders, variables } = context;
+  const substitute = (text) => substituteWithMap(text, variables);
+  const resolvedDraft = {
+    ...draft,
+    url: substitute(draft.url),
+    body: substitute(draft.body),
+    params: substituteKeyValueRows(draft.params, variables),
+    headers: substituteKeyValueRows(draft.headers, variables),
+    auth: resolveAuthVariables(draft.auth, substitute)
+  };
+  const resolvedCollectionHeaders = substituteKeyValueRows(
+    collectionHeaders,
+    variables
+  );
+  const resolvedCollectionAuth = resolveAuthVariables(
+    collectionAuth,
+    substitute
+  );
+  const effectiveAuth = resolvedDraft.auth.type !== "none" ? resolvedDraft.auth : resolvedCollectionAuth;
   const authValue = buildAuthHeaderValue(effectiveAuth);
-  const url = buildUrl(draft.url, draft.params);
-  const headers = buildHeaders(draft, collectionHeaders, authValue);
+  const url = buildUrl(resolvedDraft.url, resolvedDraft.params);
+  const headers = buildHeaders(
+    resolvedDraft,
+    resolvedCollectionHeaders,
+    authValue
+  );
   const lines = [];
-  if (draft.method.toUpperCase() !== "GET") {
-    appendSegment(lines, `-X ${draft.method.toUpperCase()}`);
+  if (resolvedDraft.method.toUpperCase() !== "GET") {
+    appendSegment(lines, `-X ${resolvedDraft.method.toUpperCase()}`);
   }
   appendSegment(lines, shellQuote(url));
   for (const [key, value] of Object.entries(headers)) {
     appendSegment(lines, `-H ${shellQuote(`${key}: ${value}`)}`);
   }
-  appendBodyFlags(draft, lines);
+  appendBodyFlags(resolvedDraft, lines);
   return lines.join("\n");
 }
 

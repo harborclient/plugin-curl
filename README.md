@@ -23,12 +23,12 @@ Rebuilds `dist/renderer.js` on change when HarborClient file watching is enabled
 
 ## Limitations
 
-| Aspect           | Behavior                                                        |
-| ---------------- | --------------------------------------------------------------- |
-| Variables        | Shown as literal `{{name}}` — substitution happens only at Send |
-| Cookie jar       | Not included unless a `Cookie` header is set manually           |
-| Pre/post scripts | Do not affect displayed cURL                                    |
-| Multipart files  | Uses stored file paths (`@/path`) on the local machine          |
+| Aspect           | Behavior                                                                  |
+| ---------------- | ------------------------------------------------------------------------- |
+| Variables        | Resolved from collection + active environment (environment wins on dupes) |
+| Cookie jar       | Not included unless a `Cookie` header is set manually                     |
+| Pre/post scripts | Do not affect displayed cURL                                              |
+| Multipart files  | Uses stored file paths (`@/path`) on the local machine                    |
 
 ## License
 
