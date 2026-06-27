@@ -1,6 +1,6 @@
 {
   "name": "harborclient-plugin-curl",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
   "scripts": {
     "build": "esbuild src/renderer.tsx --bundle --outfile=dist/renderer.js --format=esm --jsx=automatic --jsx-import-source=@harborclient/sdk --external:react --external:react-dom --alias:react/jsx-runtime=./src/reactJsxRuntimeShim.js",
