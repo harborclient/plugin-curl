@@ -10,7 +10,7 @@
     },
     {
       "path": "dist/renderer.js",
-      "sha256": "753054c4017a8d08b41beaea86f7c99feae93faae7d81dc5ce93aca7bcc16d26"
+      "sha256": "a1cec9b34f492278343b1bccb786eb2966546fd8f1b35815d0e8fafc205ae258"
     },
     {
       "path": "manifest.json",
@@ -18,11 +18,11 @@
     },
     {
       "path": "package.json",
-      "sha256": "5e61fb2303c99e9f4a24100dd728e6c0b9f22f96f9f220d2c190e1c3951fc88e"
+      "sha256": "3a25cbc383ac7a7e36e6261e505af8b1113e934bae2a47f401635a4a6809e41f"
     },
     {
       "path": "pnpm-lock.yaml",
-      "sha256": "6a22816b0f975687ab5fcb3f3e6cb8030efe9df4e144dc4264a67d9b72e988b7"
+      "sha256": "d50ea19a73cc4aa6724d123546c6dbee871d18c567412d6fc7eb958c0b5a5bdb"
     },
     {
       "path": "README.md",
@@ -58,7 +58,7 @@
     },
     {
       "path": "src/CurlTab.tsx",
-      "sha256": "4d48cb7d0f259d0499b15ed4f6c749866914ced0f8213a43fb951218fcbf6501"
+      "sha256": "6b69e509cc7f546819e3c633b38719024f16be4066453526eb292d7518c5a65b"
     },
     {
       "path": "src/renderer.tsx",
@@ -69,5 +69,5 @@
       "sha256": "2b9cc4220a53b2059673ce592049739861538457f04ecc56e86f4ae6776579c3"
     }
   ],
-  "signature": "CVwgn3OhUtwsuh1qCws6DlPjmK+n7lBigabQn8iPxAIs2uFgB1KJkjwqZ0iJdTaKaxccUxOoUIQLsa6AWMd8AA=="
+  "signature": "C5UlLmjHmFki7/SkA3Q4DLM/UYroHzYG+QR7E15kdHAcY1IvljLQSVb+2+U8DAleNBfzCvLgSfyN4FUR6X5tCQ=="
 }

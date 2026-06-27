@@ -3,15 +3,15 @@
   "version": "1.0.3",
   "type": "module",
   "scripts": {
-    "build": "esbuild src/renderer.tsx --bundle --outfile=dist/renderer.js --format=esm --jsx=automatic --jsx-import-source=@harborclient/sdk --external:react --external:react-dom",
-    "dev": "esbuild src/renderer.tsx --bundle --outfile=dist/renderer.js --format=esm --jsx=automatic --jsx-import-source=@harborclient/sdk --external:react --external:react-dom --watch",
+    "build": "esbuild src/renderer.tsx --bundle --outfile=dist/renderer.js --format=esm --jsx=automatic --jsx-import-source=@harborclient/sdk --external:react --external:react-dom --alias:react/jsx-runtime=./src/reactJsxRuntimeShim.js",
+    "dev": "esbuild src/renderer.tsx --bundle --outfile=dist/renderer.js --format=esm --jsx=automatic --jsx-import-source=@harborclient/sdk --external:react --external:react-dom --alias:react/jsx-runtime=./src/reactJsxRuntimeShim.js --watch",
     "test": "vitest run",
     "pack": "pnpm build && zip -r ../harborclient-plugin-curl.hcp manifest.json README.md dist",
     "plugin:sign": "node --experimental-strip-types scripts/plugin-sign.ts",
     "plugin:verify": "node --experimental-strip-types scripts/plugin-verify.ts"
   },
   "devDependencies": {
-    "@harborclient/sdk": "^0.4.3",
+    "@harborclient/sdk": "file:../harborclient-sdk",
     "@types/node": "^26.0.1",
     "@types/react": "^19.1.2",
     "esbuild": "^0.25.0",

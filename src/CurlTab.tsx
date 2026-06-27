@@ -4,6 +4,7 @@ import type {
   RequestTabContext,
 } from "@harborclient/sdk";
 import { copyToClipboard } from "@harborclient/sdk/clipboard";
+import { Button, CodeEditor, FieldError } from "@harborclient/sdk/components";
 import { buildCurlCommand } from "./buildCurl";
 
 interface Props {
@@ -44,36 +45,27 @@ export function CurlTab({ context, hc }: Props) {
   return (
     <div className="flex flex-col gap-2" style={{ minHeight: "320px" }}>
       <div className="flex shrink-0 items-center justify-end">
-        <button
-          type="button"
-          className="rounded-md bg-control px-3 py-1.5 text-[14px] text-text hover:bg-control-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        <Button
+          variant="secondary"
           aria-label="Copy cURL command"
           onClick={() => {
             void handleCopy();
           }}
         >
           Copy
-        </button>
+        </Button>
       </div>
-      <textarea
-        readOnly
-        rows={14}
-        aria-label="cURL command"
-        aria-invalid={copyError != null}
-        aria-describedby={copyError != null ? "curl-copy-error" : undefined}
-        className="w-full flex-1 resize-y rounded-md border border-separator bg-control p-3 font-mono text-[14px] text-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-        style={{ minHeight: "280px", width: "100%" }}
+      <CodeEditor
         value={command}
+        language="shell"
+        readOnly
+        minHeight="280px"
+        className="flex-1"
+        aria-label="cURL command"
       />
-      {copyError != null ? (
-        <p
-          id="curl-copy-error"
-          className="text-[14px] text-danger"
-          role="status"
-        >
-          {copyError}
-        </p>
-      ) : null}
+      <FieldError id="curl-copy-error" roleAlert>
+        {copyError}
+      </FieldError>
     </div>
   );
 }

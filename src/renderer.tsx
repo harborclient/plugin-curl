@@ -12,8 +12,8 @@ export function activate(hc: PluginContext): void {
 
   hc.subscriptions.push(
     hc.ui.registerRequestTab({
-      id: "curl",
-      title: "cURL",
+      id: 'curl',
+      title: 'cURL',
       order: 45,
       Component: ({ context }) => <CurlTab context={context} hc={hc} />,
     })
