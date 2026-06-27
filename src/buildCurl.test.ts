@@ -1,38 +1,36 @@
-import { describe, expect, it } from "vitest";
-import type { RequestTabContext } from "@harborclient/sdk";
-import { buildCurlCommand } from "./buildCurl";
+import { describe, expect, it } from 'vitest';
+import type { RequestTabContext } from '@harborclient/sdk';
+import { buildCurlCommand } from './buildCurl';
 
 /**
  * Returns a minimal request tab context for curl builder tests.
  *
  * @param overrides - Partial context overrides.
  */
-function sampleContext(
-  overrides: Partial<RequestTabContext> = {}
-): RequestTabContext {
+function sampleContext(overrides: Partial<RequestTabContext> = {}): RequestTabContext {
   const base: RequestTabContext = {
     readOnly: true,
     response: null,
     collectionAuth: {
-      type: "none",
-      basic: { username: "", password: "" },
-      bearer: { token: "" },
+      type: 'none',
+      basic: { username: '', password: '' },
+      bearer: { token: '' }
     },
     collectionHeaders: [],
     variables: {},
     draft: {
-      method: "GET",
-      url: "https://example.com",
+      method: 'GET',
+      url: 'https://example.com',
       params: [],
       headers: [],
-      body: "",
-      body_type: "none",
+      body: '',
+      body_type: 'none',
       auth: {
-        type: "none",
-        basic: { username: "", password: "" },
-        bearer: { token: "" },
-      },
-    },
+        type: 'none',
+        basic: { username: '', password: '' },
+        bearer: { token: '' }
+      }
+    }
   };
 
   return {
@@ -41,149 +39,147 @@ function sampleContext(
     draft: { ...base.draft, ...overrides.draft },
     collectionAuth: overrides.collectionAuth ?? base.collectionAuth,
     collectionHeaders: overrides.collectionHeaders ?? base.collectionHeaders,
-    variables: overrides.variables ?? base.variables,
+    variables: overrides.variables ?? base.variables
   };
 }
 
-describe("buildCurlCommand", () => {
-  it("builds GET with merged query params", () => {
+describe('buildCurlCommand', () => {
+  it('builds GET with merged query params', () => {
     const command = buildCurlCommand(
       sampleContext({
         draft: {
-          method: "GET",
-          url: "https://example.com/search",
-          params: [{ key: "q", value: "hello world", enabled: true }],
+          method: 'GET',
+          url: 'https://example.com/search',
+          params: [{ key: 'q', value: 'hello world', enabled: true }],
           headers: [],
-          body: "",
-          body_type: "none",
+          body: '',
+          body_type: 'none',
           auth: {
-            type: "none",
-            basic: { username: "", password: "" },
-            bearer: { token: "" },
-          },
-        },
+            type: 'none',
+            basic: { username: '', password: '' },
+            bearer: { token: '' }
+          }
+        }
       })
     );
 
     expect(command).toContain("'https://example.com/search?q=hello+world'");
-    expect(command).not.toContain("-X");
+    expect(command).not.toContain('-X');
   });
 
-  it("builds POST with JSON body and auto Content-Type", () => {
+  it('builds POST with JSON body and auto Content-Type', () => {
     const command = buildCurlCommand(
       sampleContext({
         draft: {
-          method: "POST",
-          url: "https://example.com",
+          method: 'POST',
+          url: 'https://example.com',
           params: [],
           headers: [],
           body: '{"ok":true}',
-          body_type: "json",
+          body_type: 'json',
           auth: {
-            type: "none",
-            basic: { username: "", password: "" },
-            bearer: { token: "" },
-          },
-        },
+            type: 'none',
+            basic: { username: '', password: '' },
+            bearer: { token: '' }
+          }
+        }
       })
     );
 
-    expect(command).toContain("-X POST");
+    expect(command).toContain('-X POST');
     expect(command).toContain("'Content-Type: application/json'");
-    expect(command).toContain("--data-raw '{\"ok\":true}'");
+    expect(command).toContain('--data-raw \'{"ok":true}\'');
   });
 
-  it("adds Bearer auth from the request Auth tab", () => {
+  it('adds Bearer auth from the request Auth tab', () => {
     const command = buildCurlCommand(
       sampleContext({
         draft: {
-          method: "GET",
-          url: "https://example.com",
+          method: 'GET',
+          url: 'https://example.com',
           params: [],
           headers: [],
-          body: "",
-          body_type: "none",
+          body: '',
+          body_type: 'none',
           auth: {
-            type: "bearer",
-            basic: { username: "", password: "" },
-            bearer: { token: "abc123" },
-          },
-        },
+            type: 'bearer',
+            basic: { username: '', password: '' },
+            bearer: { token: 'abc123' }
+          }
+        }
       })
     );
 
     expect(command).toContain("'Authorization: Bearer abc123'");
   });
 
-  it("inherits Basic auth from collection when request auth is none", () => {
+  it('inherits Basic auth from collection when request auth is none', () => {
     const command = buildCurlCommand(
       sampleContext({
         collectionAuth: {
-          type: "basic",
-          basic: { username: "alice", password: "secret" },
-          bearer: { token: "" },
+          type: 'basic',
+          basic: { username: 'alice', password: 'secret' },
+          bearer: { token: '' }
         },
         draft: {
-          method: "GET",
-          url: "https://example.com",
+          method: 'GET',
+          url: 'https://example.com',
           params: [],
           headers: [],
-          body: "",
-          body_type: "none",
+          body: '',
+          body_type: 'none',
           auth: {
-            type: "none",
-            basic: { username: "", password: "" },
-            bearer: { token: "" },
-          },
-        },
+            type: 'none',
+            basic: { username: '', password: '' },
+            bearer: { token: '' }
+          }
+        }
       })
     );
 
     expect(command).toContain("'Authorization: Basic ");
-    expect(command).toContain(globalThis.btoa("alice:secret"));
+    expect(command).toContain(globalThis.btoa('alice:secret'));
   });
 
-  it("prefers a manual Authorization header over Auth tab credentials", () => {
+  it('prefers a manual Authorization header over Auth tab credentials', () => {
     const command = buildCurlCommand(
       sampleContext({
         draft: {
-          method: "GET",
-          url: "https://example.com",
+          method: 'GET',
+          url: 'https://example.com',
           params: [],
-          headers: [
-            { key: "Authorization", value: "Bearer manual", enabled: true },
-          ],
-          body: "",
-          body_type: "none",
+          headers: [{ key: 'Authorization', value: 'Bearer manual', enabled: true }],
+          body: '',
+          body_type: 'none',
           auth: {
-            type: "bearer",
-            basic: { username: "", password: "" },
-            bearer: { token: "ignored" },
-          },
-        },
+            type: 'bearer',
+            basic: { username: '', password: '' },
+            bearer: { token: 'ignored' }
+          }
+        }
       })
     );
 
     expect(command).toContain("'Authorization: Bearer manual'");
-    expect(command).not.toContain("ignored");
+    expect(command).not.toContain('ignored');
   });
 
-  it("emits urlencoded and multipart body flags", () => {
+  it('emits urlencoded and multipart body flags', () => {
     const urlencoded = buildCurlCommand(
       sampleContext({
         draft: {
-          method: "POST",
-          url: "https://example.com",
+          method: 'POST',
+          url: 'https://example.com',
           params: [],
           headers: [],
-          body: JSON.stringify([{ key: "name", value: "Ada", enabled: true }]),
-          body_type: "urlencoded",
+          body: JSON.stringify([{ key: 'name', value: 'Ada', enabled: true }]),
+          body_type: 'urlencoded',
           auth: {
-            type: "none",
-            basic: { username: "", password: "" },
-            bearer: { token: "" },
-          },
-        },
+            type: 'none',
+            basic: { username: '', password: '' },
+            bearer: { token: '' }
+          }
+        }
       })
     );
 
@@ -192,64 +188,64 @@ describe("buildCurlCommand", () => {
     const multipart = buildCurlCommand(
       sampleContext({
         draft: {
-          method: "POST",
-          url: "https://example.com",
+          method: 'POST',
+          url: 'https://example.com',
           params: [],
           headers: [],
           body: JSON.stringify([
             {
-              key: "note",
-              value: "hi",
+              key: 'note',
+              value: 'hi',
               enabled: true,
-              type: "text",
-              files: [],
+              type: 'text',
+              files: []
             },
             {
-              key: "file",
-              value: "",
+              key: 'file',
+              value: '',
               enabled: true,
-              type: "file",
-              files: ["/tmp/upload.bin"],
-            },
+              type: 'file',
+              files: ['/tmp/upload.bin']
+            }
           ]),
-          body_type: "multipart",
+          body_type: 'multipart',
           auth: {
-            type: "none",
-            basic: { username: "", password: "" },
-            bearer: { token: "" },
-          },
-        },
+            type: 'none',
+            basic: { username: '', password: '' },
+            bearer: { token: '' }
+          }
+        }
       })
     );
 
     expect(multipart).toContain("-F 'note=hi'");
     expect(multipart).toContain("-F 'file=@/tmp/upload.bin'");
-    expect(multipart).not.toContain("Content-Type");
+    expect(multipart).not.toContain('Content-Type');
   });
 
-  it("substitutes collection and environment variables in url, auth, and body", () => {
+  it('substitutes collection and environment variables in url, auth, and body', () => {
     const command = buildCurlCommand(
       sampleContext({
         variables: {
-          baseUrl: "https://api.example.com",
-          apiBase: "/v1",
-          idToken: "token-abc",
-          apiKey: "key-123",
-          apiSecret: "secret-456",
+          baseUrl: 'https://api.example.com',
+          apiBase: '/v1',
+          idToken: 'token-abc',
+          apiKey: 'key-123',
+          apiSecret: 'secret-456'
         },
         draft: {
-          method: "POST",
-          url: "{{baseUrl}}{{apiBase}}/auth/apiGrant",
+          method: 'POST',
+          url: '{{baseUrl}}{{apiBase}}/auth/apiGrant',
           params: [],
           headers: [],
           body: '{\n  "key": "{{apiKey}}",\n  "secret": "{{apiSecret}}"\n}',
-          body_type: "json",
+          body_type: 'json',
           auth: {
-            type: "bearer",
-            basic: { username: "", password: "" },
-            bearer: { token: "{{idToken}}" },
-          },
-        },
+            type: 'bearer',
+            basic: { username: '', password: '' },
+            bearer: { token: '{{idToken}}' }
+          }
+        }
       })
     );
 
@@ -257,26 +253,26 @@ describe("buildCurlCommand", () => {
     expect(command).toContain("'Authorization: Bearer token-abc'");
     expect(command).toContain('"key": "key-123"');
     expect(command).toContain('"secret": "secret-456"');
-    expect(command).not.toContain("{{");
+    expect(command).not.toContain('{{');
   });
 
-  it("leaves unknown variable placeholders literal", () => {
+  it('leaves unknown variable placeholders literal', () => {
     const command = buildCurlCommand(
       sampleContext({
-        variables: { known: "resolved" },
+        variables: { known: 'resolved' },
         draft: {
-          method: "GET",
-          url: "https://example.com/{{known}}/{{missing}}",
+          method: 'GET',
+          url: 'https://example.com/{{known}}/{{missing}}',
           params: [],
           headers: [],
-          body: "",
-          body_type: "none",
+          body: '',
+          body_type: 'none',
           auth: {
-            type: "none",
-            basic: { username: "", password: "" },
-            bearer: { token: "" },
-          },
-        },
+            type: 'none',
+            basic: { username: '', password: '' },
+            bearer: { token: '' }
+          }
+        }
       })
     );
 

@@ -1,4 +1,4 @@
-import { runVerifyCli } from "@harborclient/sdk/signing";
+import { runVerifyCli } from '@harborclient/sdk/signing';
 
 /**
  * Delegates to the SDK verification CLI.

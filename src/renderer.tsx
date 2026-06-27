@@ -1,6 +1,6 @@
-import { installReact } from "@harborclient/sdk";
-import type { PluginContext } from "@harborclient/sdk";
-import { CurlTab } from "./CurlTab";
+import { installReact } from '@harborclient/sdk';
+import type { PluginContext } from '@harborclient/sdk';
+import { CurlTab } from './CurlTab';
 
 /**
  * Registers the cURL request editor tab when the plugin activates.
@@ -15,7 +15,7 @@ export function activate(hc: PluginContext): void {
       id: 'curl',
       title: 'cURL',
       order: 45,
-      Component: ({ context }) => <CurlTab context={context} hc={hc} />,
+      Component: ({ context }) => <CurlTab context={context} hc={hc} />
     })
   );
 }

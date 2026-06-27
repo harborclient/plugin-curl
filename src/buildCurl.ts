@@ -1,5 +1,5 @@
-import type { RequestDraft, RequestTabContext } from "@harborclient/sdk";
-import { resolveRequest } from "@harborclient/sdk/http";
+import type { RequestDraft, RequestTabContext } from '@harborclient/sdk';
+import { resolveRequest } from '@harborclient/sdk/http';
 
 type KeyValue = { key: string; value: string; enabled: boolean };
 
@@ -7,7 +7,7 @@ type FormDataPart = {
   key: string;
   value: string;
   enabled: boolean;
-  type: "text" | "file";
+  type: 'text' | 'file';
   files: string[];
 };
 
@@ -55,9 +55,9 @@ function parseUrlEncodedParts(body: string): KeyValue[] {
     return parsed.map((row) => {
       const record = row as Partial<KeyValue>;
       return {
-        key: typeof record.key === "string" ? record.key : "",
-        value: typeof record.value === "string" ? record.value : "",
-        enabled: record.enabled !== false,
+        key: typeof record.key === 'string' ? record.key : '',
+        value: typeof record.value === 'string' ? record.value : '',
+        enabled: record.enabled !== false
       };
     });
   } catch {
@@ -84,15 +84,13 @@ function parseFormParts(body: string): FormDataPart[] {
     return parsed.map((part) => {
       const record = part as Partial<FormDataPart>;
       return {
-        key: typeof record.key === "string" ? record.key : "",
-        value: typeof record.value === "string" ? record.value : "",
+        key: typeof record.key === 'string' ? record.key : '',
+        value: typeof record.value === 'string' ? record.value : '',
         enabled: record.enabled !== false,
-        type: record.type === "file" ? "file" : "text",
+        type: record.type === 'file' ? 'file' : 'text',
         files: Array.isArray(record.files)
-          ? record.files.filter(
-            (file): file is string => typeof file === "string"
-          )
-          : [],
+          ? record.files.filter((file): file is string => typeof file === 'string')
+          : []
       };
     });
   } catch {
@@ -107,14 +105,9 @@ function parseFormParts(body: string): FormDataPart[] {
  * @param lines - Accumulated command lines.
  */
 function appendUrlEncodedBody(body: string, lines: string[]): void {
-  const rows = parseUrlEncodedParts(body).filter(
-    (row) => row.enabled && row.key.trim()
-  );
+  const rows = parseUrlEncodedParts(body).filter((row) => row.enabled && row.key.trim());
   for (const row of rows) {
-    appendSegment(
-      lines,
-      `--data-urlencode ${shellQuote(`${row.key.trim()}=${row.value}`)}`
-    );
+    appendSegment(lines, `--data-urlencode ${shellQuote(`${row.key.trim()}=${row.value}`)}`);
   }
 }
 
@@ -125,12 +118,10 @@ function appendUrlEncodedBody(body: string, lines: string[]): void {
  * @param lines - Accumulated command lines.
  */
 function appendMultipartBody(body: string, lines: string[]): void {
-  const parts = parseFormParts(body).filter(
-    (part) => part.enabled && part.key.trim()
-  );
+  const parts = parseFormParts(body).filter((part) => part.enabled && part.key.trim());
   for (const part of parts) {
     const key = part.key.trim();
-    if (part.type === "file") {
+    if (part.type === 'file') {
       for (const filePath of part.files) {
         appendSegment(lines, `-F ${shellQuote(`${key}=@${filePath}`)}`);
       }
@@ -147,20 +138,20 @@ function appendMultipartBody(body: string, lines: string[]): void {
  * @param lines - Accumulated command lines.
  */
 function appendBodyFlags(draft: RequestDraft, lines: string[]): void {
-  if (draft.method === "GET" || draft.method === "HEAD") {
+  if (draft.method === 'GET' || draft.method === 'HEAD') {
     return;
   }
 
-  if (draft.body_type === "none" || !draft.body.trim()) {
+  if (draft.body_type === 'none' || !draft.body.trim()) {
     return;
   }
 
-  if (draft.body_type === "urlencoded") {
+  if (draft.body_type === 'urlencoded') {
     appendUrlEncodedBody(draft.body, lines);
     return;
   }
 
-  if (draft.body_type === "multipart") {
+  if (draft.body_type === 'multipart') {
     appendMultipartBody(draft.body, lines);
     return;
   }
@@ -178,11 +169,11 @@ export function buildCurlCommand(context: RequestTabContext): string {
   const draftForBody: RequestDraft = {
     ...context.draft,
     body: resolved.body,
-    method: resolved.method,
+    method: resolved.method
   };
   const lines: string[] = [];
 
-  if (resolved.method.toUpperCase() !== "GET") {
+  if (resolved.method.toUpperCase() !== 'GET') {
     appendSegment(lines, `-X ${resolved.method.toUpperCase()}`);
   }
 
@@ -194,5 +185,5 @@ export function buildCurlCommand(context: RequestTabContext): string {
 
   appendBodyFlags(draftForBody, lines);
 
-  return lines.join("\n");
+  return lines.join('\n');
 }

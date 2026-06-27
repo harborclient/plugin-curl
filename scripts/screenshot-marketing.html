@@ -1,409 +1,425 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-<head>
-  <meta charset="UTF-8" />
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+      html,
+      body {
+        width: 1280px;
+        height: 720px;
+        min-height: 720px;
+        max-height: 720px;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background-color: #0c1220;
+        background-image:
+          radial-gradient(ellipse 70% 60% at 85% 10%, rgba(56, 189, 248, 0.2) 0%, transparent 55%),
+          radial-gradient(ellipse 60% 50% at 10% 85%, rgba(99, 102, 241, 0.16) 0%, transparent 50%),
+          radial-gradient(ellipse 40% 30% at 50% 50%, rgba(16, 185, 129, 0.06) 0%, transparent 60%),
+          linear-gradient(160deg, #0c1220 0%, #111827 45%, #0a0f1a 100%);
+        background-repeat: no-repeat;
+        background-size: 1280px 720px;
+      }
 
-    html,
-    body {
-      width: 1280px;
-      height: 720px;
-      min-height: 720px;
-      max-height: 720px;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #0c1220;
-      background-image:
-        radial-gradient(ellipse 70% 60% at 85% 10%, rgba(56, 189, 248, 0.2) 0%, transparent 55%),
-        radial-gradient(ellipse 60% 50% at 10% 85%, rgba(99, 102, 241, 0.16) 0%, transparent 50%),
-        radial-gradient(ellipse 40% 30% at 50% 50%, rgba(16, 185, 129, 0.06) 0%, transparent 60%),
-        linear-gradient(160deg, #0c1220 0%, #111827 45%, #0a0f1a 100%);
-      background-repeat: no-repeat;
-      background-size: 1280px 720px;
-    }
+      .canvas {
+        position: fixed;
+        inset: 0;
+        width: 1280px;
+        height: 720px;
+        background: transparent;
+      }
 
-    .canvas {
-      position: fixed;
-      inset: 0;
-      width: 1280px;
-      height: 720px;
-      background: transparent;
-    }
+      .grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 32px 32px;
+        pointer-events: none;
+      }
 
-    .grid {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-      background-size: 32px 32px;
-      pointer-events: none;
-    }
+      .header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        padding: 32px 48px 20px;
+      }
 
-    .header {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 2;
-      padding: 32px 48px 20px;
-    }
+      .mockup-area {
+        position: absolute;
+        top: 172px;
+        left: 0;
+        width: 1280px;
+        height: 548px;
+      }
 
-    .mockup-area {
-      position: absolute;
-      top: 172px;
-      left: 0;
-      width: 1280px;
-      height: 548px;
-    }
+      .badge-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
 
-    .badge-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
+      .plugin-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 5px 12px;
+        border-radius: 999px;
+        background: rgba(56, 189, 248, 0.12);
+        border: 1px solid rgba(56, 189, 248, 0.35);
+        color: #7dd3fc;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
 
-    .plugin-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 5px 12px;
-      border-radius: 999px;
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      color: #7dd3fc;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
+      .plugin-badge .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #38bdf8;
+        box-shadow: 0 0 8px #38bdf8;
+      }
 
-    .plugin-badge .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #38bdf8;
-      box-shadow: 0 0 8px #38bdf8;
-    }
+      .pill {
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: #94a3b8;
+        font-size: 11px;
+        font-weight: 500;
+      }
 
-    .pill {
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: #94a3b8;
-      font-size: 11px;
-      font-weight: 500;
-    }
+      h1 {
+        font-size: 38px;
+        font-weight: 700;
+        line-height: 1.1;
+        color: #f8fafc;
+        letter-spacing: -0.02em;
+      }
 
-    h1 {
-      font-size: 38px;
-      font-weight: 700;
-      line-height: 1.1;
-      color: #f8fafc;
-      letter-spacing: -0.02em;
-    }
+      h1 span {
+        background: linear-gradient(90deg, #38bdf8, #818cf8, #34d399);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
 
-    h1 span {
-      background: linear-gradient(90deg, #38bdf8, #818cf8, #34d399);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+      .subtitle {
+        margin-top: 10px;
+        font-size: 16px;
+        color: #64748b;
+        line-height: 1.45;
+        max-width: 560px;
+      }
 
-    .subtitle {
-      margin-top: 10px;
-      font-size: 16px;
-      color: #64748b;
-      line-height: 1.45;
-      max-width: 560px;
-    }
+      .mockup-glow {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 4px;
+        bottom: 0;
+        border-radius: 16px 16px 0 0;
+        background: linear-gradient(
+          135deg,
+          rgba(56, 189, 248, 0.22),
+          rgba(129, 140, 248, 0.14),
+          rgba(52, 211, 153, 0.1)
+        );
+        filter: blur(24px);
+        opacity: 0.85;
+      }
 
-    .mockup-glow {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 4px;
-      bottom: 0;
-      border-radius: 16px 16px 0 0;
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.22), rgba(129, 140, 248, 0.14), rgba(52, 211, 153, 0.1));
-      filter: blur(24px);
-      opacity: 0.85;
-    }
+      .mockup {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1280px;
+        height: 548px;
+        border-radius: 12px 12px 0 0;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: none;
+        background: #1a1f2e;
+        box-shadow:
+          0 -8px 32px rgba(0, 0, 0, 0.35),
+          0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
 
-    .mockup {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 1280px;
-      height: 548px;
-      border-radius: 12px 12px 0 0;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-bottom: none;
-      background: #1a1f2e;
-      box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
+      .mockup-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        background: #141824;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        flex-shrink: 0;
+      }
 
-    .mockup-toolbar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 16px;
-      background: #141824;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      flex-shrink: 0;
-    }
+      .traffic {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+      }
 
-    .traffic {
-      width: 11px;
-      height: 11px;
-      border-radius: 50%;
-    }
+      .traffic.r {
+        background: #ff5f57;
+      }
 
-    .traffic.r {
-      background: #ff5f57;
-    }
+      .traffic.y {
+        background: #febc2e;
+      }
 
-    .traffic.y {
-      background: #febc2e;
-    }
+      .traffic.g {
+        background: #28c840;
+      }
 
-    .traffic.g {
-      background: #28c840;
-    }
+      .toolbar-title {
+        margin-left: 10px;
+        font-size: 12px;
+        color: #64748b;
+        font-weight: 500;
+      }
 
-    .toolbar-title {
-      margin-left: 10px;
-      font-size: 12px;
-      color: #64748b;
-      font-weight: 500;
-    }
+      .tab-bar {
+        display: flex;
+        gap: 0;
+        padding: 0 12px;
+        background: #161b28;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        flex-shrink: 0;
+      }
 
-    .tab-bar {
-      display: flex;
-      gap: 0;
-      padding: 0 12px;
-      background: #161b28;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      flex-shrink: 0;
-    }
+      .tab {
+        padding: 10px 16px;
+        font-size: 12px;
+        color: #64748b;
+        border-bottom: 2px solid transparent;
+      }
 
-    .tab {
-      padding: 10px 16px;
-      font-size: 12px;
-      color: #64748b;
-      border-bottom: 2px solid transparent;
-    }
+      .tab.active {
+        color: #e2e8f0;
+        border-bottom-color: #38bdf8;
+        background: rgba(56, 189, 248, 0.06);
+      }
 
-    .tab.active {
-      color: #e2e8f0;
-      border-bottom-color: #38bdf8;
-      background: rgba(56, 189, 248, 0.06);
-    }
+      .request-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        background: #161b28;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        flex-shrink: 0;
+      }
 
-    .request-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
-      background: #161b28;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      flex-shrink: 0;
-    }
+      .method {
+        padding: 4px 10px;
+        border-radius: 5px;
+        background: rgba(52, 211, 153, 0.15);
+        color: #34d399;
+        font-size: 12px;
+        font-weight: 700;
+        font-family: ui-monospace, monospace;
+      }
 
-    .method {
-      padding: 4px 10px;
-      border-radius: 5px;
-      background: rgba(52, 211, 153, 0.15);
-      color: #34d399;
-      font-size: 12px;
-      font-weight: 700;
-      font-family: ui-monospace, monospace;
-    }
+      .url {
+        flex: 1;
+        font-size: 12px;
+        color: #94a3b8;
+        font-family: ui-monospace, monospace;
+      }
 
-    .url {
-      flex: 1;
-      font-size: 12px;
-      color: #94a3b8;
-      font-family: ui-monospace, monospace;
-    }
+      .curl-panel {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        padding: 16px 20px 20px;
+      }
 
-    .curl-panel {
-      flex: 1;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
-      padding: 16px 20px 20px;
-    }
+      .curl-toolbar {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 12px;
+        flex-shrink: 0;
+      }
 
-    .curl-toolbar {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 12px;
-      flex-shrink: 0;
-    }
+      .copy-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 16px;
+        border-radius: 7px;
+        background: linear-gradient(135deg, #0ea5e9, #6366f1);
+        color: white;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+      }
 
-    .copy-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 8px 16px;
-      border-radius: 7px;
-      background: linear-gradient(135deg, #0ea5e9, #6366f1);
-      color: white;
-      font-size: 13px;
-      font-weight: 600;
-      box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
-    }
+      .copy-btn svg {
+        width: 14px;
+        height: 14px;
+      }
 
-    .copy-btn svg {
-      width: 14px;
-      height: 14px;
-    }
+      .code-box {
+        flex: 1;
+        min-height: 0;
+        padding: 18px 20px;
+        border-radius: 9px;
+        background: #0f131c;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+        font-size: 14px;
+        line-height: 1.65;
+        color: #cbd5e1;
+      }
 
-    .code-box {
-      flex: 1;
-      min-height: 0;
-      padding: 18px 20px;
-      border-radius: 9px;
-      background: #0f131c;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 14px;
-      line-height: 1.65;
-      color: #cbd5e1;
-    }
+      .code-box .kw {
+        color: #38bdf8;
+      }
 
-    .code-box .kw {
-      color: #38bdf8;
-    }
+      .code-box .flag {
+        color: #a78bfa;
+      }
 
-    .code-box .flag {
-      color: #a78bfa;
-    }
+      .code-box .str {
+        color: #34d399;
+      }
 
-    .code-box .str {
-      color: #34d399;
-    }
+      .code-box .hdr {
+        color: #fbbf24;
+      }
 
-    .code-box .hdr {
-      color: #fbbf24;
-    }
+      .toast {
+        position: absolute;
+        top: 36px;
+        right: 56px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 9px;
+        background: rgba(15, 23, 42, 0.95);
+        border: 1px solid rgba(52, 211, 153, 0.4);
+        box-shadow:
+          0 8px 24px rgba(0, 0, 0, 0.45),
+          0 0 20px rgba(52, 211, 153, 0.12);
+        z-index: 4;
+      }
 
-    .toast {
-      position: absolute;
-      top: 36px;
-      right: 56px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 14px;
-      border-radius: 9px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(52, 211, 153, 0.4);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 20px rgba(52, 211, 153, 0.12);
-      z-index: 4;
-    }
+      .toast-icon {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: rgba(52, 211, 153, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #34d399;
+        font-size: 11px;
+        font-weight: 700;
+      }
 
-    .toast-icon {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: rgba(52, 211, 153, 0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #34d399;
-      font-size: 11px;
-      font-weight: 700;
-    }
+      .toast-text {
+        font-size: 12px;
+        color: #e2e8f0;
+        font-weight: 500;
+      }
+    </style>
+  </head>
 
-    .toast-text {
-      font-size: 12px;
-      color: #e2e8f0;
-      font-weight: 500;
-    }
-  </style>
-</head>
+  <body>
+    <div class="canvas">
+      <div class="grid"></div>
 
-<body>
-  <div class="canvas">
-    <div class="grid"></div>
-
-    <div class="header">
-      <div class="badge-row">
-        <div class="plugin-badge"><span class="dot"></span> HarborClient Plugin</div>
-        <span class="pill">One-click copy</span>
-        <span class="pill">Live sync</span>
-        <span class="pill">Zero config</span>
+      <div class="header">
+        <div class="badge-row">
+          <div class="plugin-badge"><span class="dot"></span> HarborClient Plugin</div>
+          <span class="pill">One-click copy</span>
+          <span class="pill">Live sync</span>
+          <span class="pill">Zero config</span>
+        </div>
+        <h1>Your request, as <span>cURL</span> — instantly</h1>
+        <p class="subtitle">
+          Generate copy-ready curl commands from any HarborClient request. Share, debug, and
+          automate in seconds.
+        </p>
       </div>
-      <h1>Your request, as <span>cURL</span> — instantly</h1>
-      <p class="subtitle">Generate copy-ready curl commands from any HarborClient request. Share, debug, and automate in
-        seconds.</p>
-    </div>
 
-    <div class="mockup-area">
-      <div class="mockup-glow"></div>
-      <div class="mockup">
-        <div class="mockup-toolbar">
-          <span class="traffic r"></span>
-          <span class="traffic y"></span>
-          <span class="traffic g"></span>
-          <span class="toolbar-title">HarborClient — API Grant</span>
-        </div>
-        <div class="tab-bar">
-          <div class="tab">Params</div>
-          <div class="tab">Headers</div>
-          <div class="tab">Body</div>
-          <div class="tab active">cURL</div>
-        </div>
-        <div class="request-row">
-          <span class="method">POST</span>
-          <span class="url">https://api.example.com/v1/oauth/token</span>
-        </div>
-        <div class="curl-panel">
-          <div class="curl-toolbar">
-            <div class="copy-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="9" y="9" width="13" height="13" rx="2" />
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-              </svg>
-              Copy
+      <div class="mockup-area">
+        <div class="mockup-glow"></div>
+        <div class="mockup">
+          <div class="mockup-toolbar">
+            <span class="traffic r"></span>
+            <span class="traffic y"></span>
+            <span class="traffic g"></span>
+            <span class="toolbar-title">HarborClient — API Grant</span>
+          </div>
+          <div class="tab-bar">
+            <div class="tab">Params</div>
+            <div class="tab">Headers</div>
+            <div class="tab">Body</div>
+            <div class="tab active">cURL</div>
+          </div>
+          <div class="request-row">
+            <span class="method">POST</span>
+            <span class="url">https://api.example.com/v1/oauth/token</span>
+          </div>
+          <div class="curl-panel">
+            <div class="curl-toolbar">
+              <div class="copy-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+                Copy
+              </div>
+            </div>
+            <div class="code-box">
+              <span class="kw">curl</span> <span class="flag">-X</span> POST \<br />
+              &nbsp;&nbsp;<span class="str">'https://api.example.com/v1/oauth/token'</span> \<br />
+              <span class="flag">-H</span>
+              <span class="hdr">'Content-Type: application/json'</span> \<br />
+              <span class="flag">-H</span>
+              <span class="hdr">'Accept: application/json'</span> \<br />
+              <span class="flag">-H</span>
+              <span class="hdr">'Authorization: Bearer ••••••••'</span> \<br />
+              <span class="flag">--data-raw</span>
+              <span class="str"
+                >'{<br />
+                &nbsp;&nbsp;"grant_type": "client_credentials",<br />
+                &nbsp;&nbsp;"scope": "read write"<br />
+                }'</span
+              >
             </div>
           </div>
-          <div class="code-box">
-            <span class="kw">curl</span> <span class="flag">-X</span> POST \<br>
-            &nbsp;&nbsp;<span class="str">'https://api.example.com/v1/oauth/token'</span> \<br>
-            <span class="flag">-H</span> <span class="hdr">'Content-Type: application/json'</span> \<br>
-            <span class="flag">-H</span> <span class="hdr">'Accept: application/json'</span> \<br>
-            <span class="flag">-H</span> <span class="hdr">'Authorization: Bearer ••••••••'</span> \<br>
-            <span class="flag">--data-raw</span> <span class="str">'{<br>
-              &nbsp;&nbsp;"grant_type": "client_credentials",<br>
-              &nbsp;&nbsp;"scope": "read write"<br>
-              }'</span>
-          </div>
         </div>
       </div>
-    </div>
 
-    <div class="toast">
-      <div class="toast-icon">✓</div>
-      <span class="toast-text">Copied to clipboard</span>
+      <div class="toast">
+        <div class="toast-icon">✓</div>
+        <span class="toast-text">Copied to clipboard</span>
+      </div>
     </div>
-  </div>
-</body>
-
+  </body>
 </html>

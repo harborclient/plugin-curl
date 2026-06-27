@@ -1,11 +1,8 @@
-import { useMemo, useState } from "@harborclient/sdk/react";
-import type {
-  PluginContext,
-  RequestTabContext,
-} from "@harborclient/sdk";
-import { copyToClipboard } from "@harborclient/sdk/clipboard";
-import { Button, CodeEditor, FieldError } from "@harborclient/sdk/components";
-import { buildCurlCommand } from "./buildCurl";
+import { useMemo, useState } from '@harborclient/sdk/react';
+import type { PluginContext, RequestTabContext } from '@harborclient/sdk';
+import { copyToClipboard } from '@harborclient/sdk/clipboard';
+import { Button, CodeEditor, FieldError } from '@harborclient/sdk/components';
+import { buildCurlCommand } from './buildCurl';
 
 interface Props {
   /**
@@ -36,14 +33,14 @@ export function CurlTab({ context, hc }: Props) {
   const handleCopy = async (): Promise<void> => {
     setCopyError(null);
     try {
-      await copyToClipboard(hc, command, { toast: "Copied to clipboard" });
+      await copyToClipboard(hc, command, { toast: 'Copied to clipboard' });
     } catch {
-      setCopyError("Failed to copy");
+      setCopyError('Failed to copy');
     }
   };
 
   return (
-    <div className="flex flex-col gap-2" style={{ minHeight: "320px" }}>
+    <div className="flex flex-col gap-2" style={{ minHeight: '320px' }}>
       <div className="flex shrink-0 items-center justify-end">
         <Button
           variant="secondary"

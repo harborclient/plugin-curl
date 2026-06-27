@@ -1,4 +1,4 @@
-import { runSignCli } from "@harborclient/sdk/signing";
+import { runSignCli } from '@harborclient/sdk/signing';
 
 /**
  * Delegates to the SDK signing CLI.

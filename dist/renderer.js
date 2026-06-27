@@ -33581,9 +33581,7 @@ function parseFormParts(body) {
         value: typeof record.value === "string" ? record.value : "",
         enabled: record.enabled !== false,
         type: record.type === "file" ? "file" : "text",
-        files: Array.isArray(record.files) ? record.files.filter(
-          (file) => typeof file === "string"
-        ) : []
+        files: Array.isArray(record.files) ? record.files.filter((file) => typeof file === "string") : []
       };
     });
   } catch {
@@ -33591,20 +33589,13 @@ function parseFormParts(body) {
   }
 }
 function appendUrlEncodedBody(body, lines) {
-  const rows = parseUrlEncodedParts(body).filter(
-    (row) => row.enabled && row.key.trim()
-  );
+  const rows = parseUrlEncodedParts(body).filter((row) => row.enabled && row.key.trim());
   for (const row of rows) {
-    appendSegment(
-      lines,
-      `--data-urlencode ${shellQuote(`${row.key.trim()}=${row.value}`)}`
-    );
+    appendSegment(lines, `--data-urlencode ${shellQuote(`${row.key.trim()}=${row.value}`)}`);
   }
 }
 function appendMultipartBody(body, lines) {
-  const parts = parseFormParts(body).filter(
-    (part) => part.enabled && part.key.trim()
-  );
+  const parts = parseFormParts(body).filter((part) => part.enabled && part.key.trim());
   for (const part of parts) {
     const key = part.key.trim();
     if (part.type === "file") {
