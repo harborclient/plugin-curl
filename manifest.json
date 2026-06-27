@@ -2,7 +2,7 @@
   "id": "com.harborclient.plugins.curl",
   "name": "cURL",
   "author": "HarborClient",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "engines": { "harborclient": ">=1.8.4" },
   "renderer": "dist/renderer.js",
   "permissions": ["ui"],
