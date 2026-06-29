@@ -22,7 +22,7 @@
     },
     {
       "path": "dist/renderer.js",
-      "sha256": "0e1f139f630993cd07726189768045c1d12061c7f7c204f548b22532637fcb30"
+      "sha256": "50d8fff90735ae3b056b73b92601cf6bfef9ffe8e09f33855f938f141c3cc758"
     },
     {
       "path": "eslint.config.mjs",
@@ -34,11 +34,11 @@
     },
     {
       "path": "package.json",
-      "sha256": "28ab85929fd6e8f9a2ed884e469a07d56fe7f2b01a631bdead36b18eaec60700"
+      "sha256": "61e09e613ade81a92bfb84406309d02036c9b3a5c3aa36dd61532726749c13da"
     },
     {
       "path": "pnpm-lock.yaml",
-      "sha256": "d7451efad95b7673cd30526fec6c910c8f7362be7551c712845da05b4bb5ec90"
+      "sha256": "b605c84dddc3f7b292ace0fa212ff37e2f18d4b03a40086f2f0daf8c724cf907"
     },
     {
       "path": "README.md",
@@ -89,5 +89,5 @@
       "sha256": "2b9cc4220a53b2059673ce592049739861538457f04ecc56e86f4ae6776579c3"
     }
   ],
-  "signature": "0aKpuUR84b/XuJOfwPLDJziBqX43Zax0RkQgYpatL64y1QYbp3xUepDN/WO6RMA2Ecl5yvgCGD3iCOyiTMmQDw=="
+  "signature": "B0oYZOqV210kOstzQTSIdZK0MYKiOZtiA2c2Ehll+rdnJwzdFZKR/3B7XZb4jAA9WlC8H75/oAP9Jw8ArlSHBw=="
 }
