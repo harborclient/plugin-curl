@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "pluginId": "com.harborclient.plugins.curl",
-  "pluginVersion": "1.0.6",
+  "pluginVersion": "1.0.7",
   "algorithm": "Ed25519",
   "files": [
     {
@@ -30,11 +30,11 @@
     },
     {
       "path": "manifest.json",
-      "sha256": "e955ab4707b4815a57769fa6c72dbdb605503aa64576efb9dfb7447729ee73fc"
+      "sha256": "0a8a8ff5e3330894f170e2819b25799eb5085ccf110da15b496f0a8fd50442bd"
     },
     {
       "path": "package.json",
-      "sha256": "61e09e613ade81a92bfb84406309d02036c9b3a5c3aa36dd61532726749c13da"
+      "sha256": "4fa96cd2bcd2e6f716a28bffe67dc6ae390d361ffa5144fab52b210cc24464d6"
     },
     {
       "path": "pnpm-lock.yaml",
@@ -89,5 +89,5 @@
       "sha256": "2b9cc4220a53b2059673ce592049739861538457f04ecc56e86f4ae6776579c3"
     }
   ],
-  "signature": "B0oYZOqV210kOstzQTSIdZK0MYKiOZtiA2c2Ehll+rdnJwzdFZKR/3B7XZb4jAA9WlC8H75/oAP9Jw8ArlSHBw=="
+  "signature": "TqeKFlDH+nIAyuLJ2DRgEDZ4bk1WPopyjIxBzi0micLFQYStG5kZAX3SOX4OQEGh1qr83NgSH0Kz8D7RarxCBg=="
 }
