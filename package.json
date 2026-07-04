@@ -4,6 +4,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "dev": "node scripts/build.mjs --watch",
+    "publish": "bash scripts/publish.sh",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint --cache .",
