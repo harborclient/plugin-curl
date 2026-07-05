@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "pluginId": "com.harborclient.plugins.curl",
-  "pluginVersion": "1.0.11",
+  "pluginVersion": "1.0.12",
   "algorithm": "Ed25519",
   "files": [
     {
@@ -30,7 +30,7 @@
     },
     {
       "path": "manifest.json",
-      "sha256": "383cefc071b65e453c34121248f22f763b69eef9b5b6d3b8a17fe2a521518fb2"
+      "sha256": "bc0668a4dc0d32ffac3826ac5370ce349a034ae996c0cfe626e7f020090b4210"
     },
     {
       "path": "package.json",
@@ -65,14 +65,6 @@
       "sha256": "272abe246e7b12684741a9eb3a26928ec7dd9a62ad4e26b95fa104c32d516412"
     },
     {
-      "path": "scripts/render-screenshot.sh",
-      "sha256": "d2fe525f530446f4f53add2abcfed2ec7f11253a7d128608781ccd18487fbb25"
-    },
-    {
-      "path": "scripts/screenshot-marketing.html",
-      "sha256": "b3ca95eb4221ff496aed7dad95a3a6f2a6796dff0e57142ba3d86f19d001324e"
-    },
-    {
       "path": "src/buildCurl.test.ts",
       "sha256": "b1ac6eb8fb24b09490a8d7f2e2c4a2c369c00996ce219d4c55cf668a0b869d9b"
     },
@@ -93,5 +85,6 @@
       "sha256": "663c22f2cb634722bc1c1191c4808b53c89d930979d4936cb6d0a539f4476ac9"
     }
   ],
-  "signature": "Gs0ZisqJ+GR4Ukphm+kTfN4MTJBt8UJ6HJ8uH3tQ8vKGuDRqjhxz5Jpn8sb1ecio0hZBaTsjRnj9w8KHu52PDQ=="
+  "keyId": "com.harborclient.plugins.curl",
+  "signature": "mh/C29rbjqEtN66gibGzT7mZQ3UhUNfEKkTk7UB8U1PSq1ALqgO/ieHdPKmQDhSg/uaBAdw6F2sLdoYjIPaKAA=="
 }
