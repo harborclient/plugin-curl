@@ -1,4 +1,3 @@
-import { installReact } from '@harborclient/sdk';
 import type { PluginContext } from '@harborclient/sdk';
 import { CurlTab } from './CurlTab';
 
@@ -8,8 +7,6 @@ import { CurlTab } from './CurlTab';
  * @param hc - SDK surface from HarborClient.
  */
 export function activate(hc: PluginContext): void {
-  installReact(hc.react);
-
   hc.subscriptions.push(
     hc.ui.registerRequestTab({
       id: 'curl',

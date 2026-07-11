@@ -10,8 +10,8 @@
     "lint": "eslint --cache .",
     "test": "vitest run",
     "pack": "pnpm build && zip -r ../harborclient-plugin-curl.hcp manifest.json README.md dist",
-    "plugin:sign": "node --experimental-strip-types scripts/plugin-sign.ts",
-    "plugin:verify": "node --experimental-strip-types scripts/plugin-verify.ts"
+    "sign": "node --experimental-strip-types scripts/plugin-sign.ts",
+    "verify": "node --experimental-strip-types scripts/plugin-verify.ts"
   },
   "dependencies": {
     "@harborclient/sdk": "^1.0.33"
