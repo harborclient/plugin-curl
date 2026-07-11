@@ -2,7 +2,7 @@
   "id": "com.harborclient.plugins.curl",
   "name": "cURL",
   "author": "HarborClient",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "summary": "Adds a tab to the request editor that shows an equivalent `curl` command for the configured request.",
   "description": "README.md",
   "categories": [
