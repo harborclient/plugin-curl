@@ -7,12 +7,10 @@ import { CurlTab } from './CurlTab';
  * @param hc - SDK surface from HarborClient.
  */
 export function activate(hc: PluginContext): void {
-  hc.subscriptions.push(
-    hc.ui.registerRequestTab({
-      id: 'curl',
-      title: 'cURL',
-      order: 45,
-      Component: ({ context }) => <CurlTab context={context} hc={hc} />
-    })
-  );
+  hc.ui.registerRequestTab({
+    id: 'curl',
+    title: 'cURL',
+    order: 45,
+    Component: ({ context }) => <CurlTab context={context} hc={hc} />
+  });
 }
