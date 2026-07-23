@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "pluginId": "com.harborclient.plugins.curl",
-  "pluginVersion": "1.0.14",
+  "pluginVersion": "1.1.1",
   "algorithm": "Ed25519",
   "files": [
     {
       "path": ".eslintcache",
-      "sha256": "33d1eb55dd2981b2c1a7126f65d3faa6e66eac84ca728fc60f7b87455edaa2eb"
+      "sha256": "d9a3dc79740d3f60fa92583d3699e48f397617bef95cc0277bee6f33a94f1077"
     },
     {
       "path": ".gitignore",
@@ -22,7 +22,7 @@
     },
     {
       "path": "dist/renderer.js",
-      "sha256": "ae86f387088e106848ba303893fca0f227e3835fa821932f38110398bdd5363c"
+      "sha256": "b07122d85ddede580169b34af56741bba4843018a1c1bca8cccfc9175fd24d21"
     },
     {
       "path": "eslint.config.mjs",
@@ -30,19 +30,19 @@
     },
     {
       "path": "manifest.json",
-      "sha256": "fe1968e5f18d45ede5dc4b25f89150debf92b54a667941d86f69026c641a0c9c"
+      "sha256": "b4ffaf24a74a5d304e2e279848f0227cc102eaaa4b9412a21d9247ff16bb5796"
     },
     {
       "path": "package.json",
-      "sha256": "b416af3916cdef57f8fde11638638fc9ef1ad17d3f74c936a5628d8c9fd0524e"
+      "sha256": "6f6945cda933aed676831ca8fecf6034d85866d97e5a3e22b2d78524e6b9f67d"
     },
     {
       "path": "pnpm-lock.yaml",
-      "sha256": "67cf06e738dc59d99d3baf07555aacd9e60f2099b1fe1c84596740876e684584"
+      "sha256": "25a9ef461edf37d755867c7f8066fc6e20c39c88d8902413642263c26c383b42"
     },
     {
       "path": "README.md",
-      "sha256": "0bbb9b5e8616cdc081ed225c2047c19ac12f4f217cd602bbf2ef00257976a6ea"
+      "sha256": "e041116042fc7174527f173be0d132e9e8995fb775af496942cfb94ab96e726b"
     },
     {
       "path": "screenshot.png",
@@ -74,7 +74,15 @@
     },
     {
       "path": "src/CurlTab.tsx",
-      "sha256": "d91abbb238c75d500f2631ff11395336fbf160b3d7af320c8d791a9008ed5957"
+      "sha256": "2149ddfcdbdcf9e59e70222b9a23803c9084c70a3e550cd774078ff4d7c85310"
+    },
+    {
+      "path": "src/parseCurl.test.ts",
+      "sha256": "efc5e2dfb0bc2a49a15fc48fe28410de2aaf99ad7cd71cc6390662748ea0cd9d"
+    },
+    {
+      "path": "src/parseCurl.ts",
+      "sha256": "f4a818b374e08c1a93d4798ec02e07136fab5aee1da43942d2ad2a5ba580620c"
     },
     {
       "path": "src/renderer.tsx",
@@ -82,9 +90,9 @@
     },
     {
       "path": "tsconfig.json",
-      "sha256": "663c22f2cb634722bc1c1191c4808b53c89d930979d4936cb6d0a539f4476ac9"
+      "sha256": "8bfb9206dfefc450801e1953fc6b0b79878da2bcc9bc6fc5073fcdcd08e9c136"
     }
   ],
   "keyId": "com.harborclient.plugins.curl",
-  "signature": "wGFllqRCM92Ve8XZmgBK+2+vp77OQVGXjQd43cMc+U+gbWoPT4MLuP2qu0rXZuHX4g5vHrRFUvZWjDWwYt3MBw=="
+  "signature": "DWWXvO8UcPxrFiakWYLTf0NayZcC9Jbb0io1V+/Hfsl4cbMf2ayZ/jwOAd51wPp8DADKFdPwZu5jo5RA2tAtCg=="
 }
