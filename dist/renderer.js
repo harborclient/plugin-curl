@@ -1,4 +1,4 @@
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/runtime/reactHost.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/runtime/reactHost.js
 var HOST_REACT_GLOBAL_KEY = "__HARBORCLIENT_HOST_REACT__";
 var HOST_REACT_DOM_GLOBAL_KEY = "__HARBORCLIENT_HOST_REACT_DOM__";
 var hostReact = null;
@@ -46,7 +46,7 @@ function requireHostReactDom() {
   return hostReactDom;
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/runtime/react.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/runtime/react.js
 function hook(name2) {
   const react = requireHostReact();
   const fn = react[name2];
@@ -107,8 +107,24 @@ function useId() {
 function useLayoutEffect(effect, deps) {
   return hook("useLayoutEffect")(effect, deps);
 }
+function useReducer(reducer, initialArg, init) {
+  return hook("useReducer")(reducer, initialArg, init);
+}
 function createElement(type, props, ...children) {
   return hook("createElement")(type, props, ...children);
+}
+function memo(Component, propsAreEqual) {
+  let Memoized = null;
+  function LazyMemo(props) {
+    const react = requireHostReact();
+    if (Memoized === null) {
+      Memoized = react.memo(Component, propsAreEqual);
+    }
+    return react.createElement(Memoized, props);
+  }
+  const displayName = (typeof Component === "function" ? Component.displayName ?? Component.name : null) ?? "Component";
+  LazyMemo.displayName = `Memo(${displayName})`;
+  return LazyMemo;
 }
 var reactNamespace = {
   useState,
@@ -125,7 +141,9 @@ var reactNamespace = {
   useContext,
   useId,
   useLayoutEffect,
-  createElement
+  useReducer,
+  createElement,
+  memo
 };
 var defaultExport = new Proxy(reactNamespace, {
   get(target, prop, receiver) {
@@ -136,7 +154,7 @@ var defaultExport = new Proxy(reactNamespace, {
   }
 });
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/clipboard.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/clipboard.js
 async function copyToClipboard(hc, text2, options) {
   await navigator.clipboard.writeText(text2);
   if (options?.toast) {
@@ -144,7 +162,7 @@ async function copyToClipboard(hc, text2, options) {
   }
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/runtime/jsx-runtime.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/runtime/jsx-runtime.js
 var Fragment = Symbol.for("@harborclient/sdk.Fragment");
 function build(type, props, key) {
   const react = requireHostReact();
@@ -3427,12 +3445,12 @@ var getDefaultConfig = () => {
 };
 var twMerge = /* @__PURE__ */ createTailwindMerge(getDefaultConfig);
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/components/utils.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/components/utils.js
 function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/components/FieldError/index.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/components/FieldError/index.js
 function spacingClasses(spacing) {
   switch (spacing) {
     case "section":
@@ -3450,7 +3468,7 @@ function FieldError({ children, spacing = "field", roleAlert = true, className, 
   return jsx("p", { ...props, className: cn("hc-field-error text-[14px] text-danger", spacingClasses(spacing), className), role: roleAlert ? "alert" : void 0, children });
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/components/Button/index.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/components/Button/index.js
 var BUTTON_BASE = "inline-flex cursor-pointer items-center rounded-full app-no-drag";
 var VARIANT_CLASSES = {
   primary: cn(BUTTON_BASE, "min-h-[32px] justify-center border border-transparent bg-accent px-3 py-1 text-[15px] font-medium text-white shadow-sm hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"),
@@ -3465,7 +3483,7 @@ function Button({ variant = "primary", className, type = "button", innerRef, ...
   return jsx("button", { ref: innerRef, type, className: cn("hc-button", VARIANT_CLASSES[variant], className), ...props });
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/components/forms/classes.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/components/forms/classes.js
 var field = "rounded-lg border border-separator bg-field px-2.5 py-1.5 text-text app-no-drag";
 var surfaceField = "w-full rounded-lg border border-separator bg-field px-3 py-2.5 text-[15px] text-text";
 function mergeFieldClasses(variant, className, rootClass) {
@@ -3473,18 +3491,18 @@ function mergeFieldClasses(variant, className, rootClass) {
   return result === "" ? void 0 : result;
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/components/forms/Input.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/components/forms/Input.js
 function Input({ ref, variant = "control", type, className, ...props }) {
   const resolvedVariant = type === "checkbox" || type === "radio" ? "plain" : variant;
   return jsx("input", { ref, type, className: mergeFieldClasses(resolvedVariant, className, "hc-input"), ...props });
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/runtime/react-dom.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/runtime/react-dom.js
 function createPortal(children, container, key) {
   return requireHostReactDom().createPortal(children, container, key);
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/components/portalToBody.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/components/portalToBody.js
 function portalToBody(node) {
   if (typeof document === "undefined") {
     throw new Error("portalToBody requires a DOM document");
@@ -3492,7 +3510,7 @@ function portalToBody(node) {
   return createPortal(node, document.body);
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/runtime/jsx-runtime-host.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/runtime/jsx-runtime-host.js
 import * as React from "react";
 function build2(type, props, key) {
   const { children, ...rest } = props ?? {};
@@ -3503,7 +3521,7 @@ function build2(type, props, key) {
 }
 var jsx2 = build2;
 
-// node_modules/.pnpm/@fortawesome+free-solid-svg-icons@7.3.0/node_modules/@fortawesome/free-solid-svg-icons/index.mjs
+// node_modules/.pnpm/@fortawesome+free-solid-svg-icons@7.3.1/node_modules/@fortawesome/free-solid-svg-icons/index.mjs
 var faXmark = {
   prefix: "fas",
   iconName: "xmark",
@@ -3520,10 +3538,10 @@ var faCopy = {
   icon: [448, 512, [], "f0c5", "M192 0c-35.3 0-64 28.7-64 64l0 256c0 35.3 28.7 64 64 64l192 0c35.3 0 64-28.7 64-64l0-200.6c0-17.4-7.1-34.1-19.7-46.2L370.6 17.8C358.7 6.4 342.8 0 326.3 0L192 0zM64 128c-35.3 0-64 28.7-64 64L0 448c0 35.3 28.7 64 64 64l192 0c35.3 0 64-28.7 64-64l0-16-64 0 0 16-192 0 0-256 16 0 0-64-16 0z"]
 };
 
-// node_modules/.pnpm/@fortawesome+react-fontawesome@3.3.1_@fortawesome+fontawesome-svg-core@7.3.0_react@19.2.7/node_modules/@fortawesome/react-fontawesome/dist/index.js
+// node_modules/.pnpm/@fortawesome+react-fontawesome@3.5.0_@fortawesome+fontawesome-svg-core@7.3.1_react@19.2.8/node_modules/@fortawesome/react-fontawesome/dist/index.js
 import React2, { useId as useId2, useMemo as useMemo2 } from "react";
 
-// node_modules/.pnpm/@fortawesome+fontawesome-svg-core@7.3.0/node_modules/@fortawesome/fontawesome-svg-core/index.mjs
+// node_modules/.pnpm/@fortawesome+fontawesome-svg-core@7.3.1/node_modules/@fortawesome/fontawesome-svg-core/index.mjs
 function _arrayLikeToArray(r5, a3) {
   (null == a3 || a3 > r5.length) && (a3 = r5.length);
   for (var e4 = 0, n3 = Array(a3); e4 < a3; e4++) n3[e4] = r5[e4];
@@ -5774,7 +5792,7 @@ var p$2 = config.measurePerformance && PERFORMANCE && PERFORMANCE.mark && PERFOR
   mark: noop$1,
   measure: noop$1
 };
-var preamble = 'FA "7.3.0"';
+var preamble = 'FA "7.3.1"';
 var begin = function begin2(name2) {
   p$2.mark("".concat(preamble, " ").concat(name2, " begins"));
   return function() {
@@ -6964,7 +6982,7 @@ var layer = api.layer;
 var text = api.text;
 var counter = api.counter;
 
-// node_modules/.pnpm/@fortawesome+react-fontawesome@3.3.1_@fortawesome+fontawesome-svg-core@7.3.0_react@19.2.7/node_modules/@fortawesome/react-fontawesome/dist/index.js
+// node_modules/.pnpm/@fortawesome+react-fontawesome@3.5.0_@fortawesome+fontawesome-svg-core@7.3.1_react@19.2.8/node_modules/@fortawesome/react-fontawesome/dist/index.js
 function _isNumerical(object) {
   object = object - 0;
   return object === object;
@@ -7158,7 +7176,17 @@ var ANIMATION_CLASSES = {
   spin: "fa-spin",
   spinPulse: "fa-spin-pulse",
   spinReverse: "fa-spin-reverse",
-  pulse: "fa-pulse"
+  pulse: "fa-pulse",
+  // the following animations are only supported in version 7.3.0 and later
+  flip360: "fa-flip-360",
+  buzz: "fa-buzz",
+  float: "fa-float",
+  jello: "fa-jello",
+  spinSnap: "fa-spin-snap",
+  spinSnap4: "fa-spin-snap-4",
+  spinSnap8: "fa-spin-snap-8",
+  swing: "fa-swing",
+  wag: "fa-wag"
 };
 var PULL_CLASSES = {
   left: "fa-pull-left",
@@ -7197,7 +7225,10 @@ var STYLE_CLASSES = {
   inverse: "fa-inverse",
   rotateBy: "fa-rotate-by",
   swapOpacity: "fa-swap-opacity",
-  widthAuto: "fa-width-auto"
+  widthAuto: "fa-width-auto",
+  // the following style classes are only supported in version 7.3.0 and later
+  canvasSquare: "fa-canvas-square",
+  canvasRoomy: "fa-canvas-roomy"
 };
 var LAYER_CLASSES = {
   default: "fa-layers"
@@ -7230,6 +7261,17 @@ function getClassListFromProps(props) {
     swapOpacity,
     rotateBy,
     widthAuto,
+    canvasSquare,
+    canvasRoomy,
+    flip360,
+    buzz,
+    float,
+    jello,
+    spinSnap,
+    spinSnap4,
+    spinSnap8,
+    swing,
+    wag,
     className
   } = props;
   const result = [];
@@ -7262,6 +7304,17 @@ function getClassListFromProps(props) {
   if (!getIsVersion7OrLater()) return result;
   if (rotateBy) result.push(STYLE_CLASSES.rotateBy);
   if (widthAuto) result.push(STYLE_CLASSES.widthAuto);
+  if (canvasSquare) result.push(STYLE_CLASSES.canvasSquare);
+  if (canvasRoomy) result.push(STYLE_CLASSES.canvasRoomy);
+  if (flip360) result.push(ANIMATION_CLASSES.flip360);
+  if (buzz) result.push(ANIMATION_CLASSES.buzz);
+  if (float) result.push(ANIMATION_CLASSES.float);
+  if (jello) result.push(ANIMATION_CLASSES.jello);
+  if (spinSnap) result.push(ANIMATION_CLASSES.spinSnap);
+  if (spinSnap4) result.push(ANIMATION_CLASSES.spinSnap4);
+  if (spinSnap8) result.push(ANIMATION_CLASSES.spinSnap8);
+  if (swing) result.push(ANIMATION_CLASSES.swing);
+  if (wag) result.push(ANIMATION_CLASSES.wag);
   const prefix = config$1.cssPrefix || config$1.familyPrefix || DEFAULT_CLASSNAME_PREFIX;
   return prefix === DEFAULT_CLASSNAME_PREFIX ? result : (
     // TODO: see if we can achieve custom prefix support without iterating
@@ -7311,7 +7364,18 @@ var DEFAULT_PROPS = {
   titleId: void 0,
   transform: void 0,
   swapOpacity: false,
-  widthAuto: false
+  widthAuto: false,
+  canvasSquare: false,
+  canvasRoomy: false,
+  flip360: false,
+  buzz: false,
+  float: false,
+  jello: false,
+  spinSnap: false,
+  spinSnap4: false,
+  spinSnap8: false,
+  swing: false,
+  wag: false
 };
 var DEFAULT_PROP_KEYS = new Set(Object.keys(DEFAULT_PROPS));
 var FontAwesomeIcon = React2.forwardRef((props, ref) => {
@@ -7361,7 +7425,7 @@ var FontAwesomeIcon = React2.forwardRef((props, ref) => {
 FontAwesomeIcon.displayName = "FontAwesomeIcon";
 var DEFAULT_CLASSNAMES = `${LAYER_CLASSES.default} ${STYLE_CLASSES.fixedWidth}`;
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/components/FaIcon/index.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/components/FaIcon/index.js
 function FaIcon({ icon: icon3, className = "h-3.5 w-3.5", title, ...props }) {
   return createElement(FontAwesomeIcon, {
     ...props,
@@ -7446,7 +7510,7 @@ function codePointSize(code) {
   return code < 65536 ? 1 : 2;
 }
 
-// node_modules/.pnpm/@codemirror+state@6.7.0/node_modules/@codemirror/state/dist/index.js
+// node_modules/.pnpm/@codemirror+state@6.7.1/node_modules/@codemirror/state/dist/index.js
 var Text = class _Text {
   /**
   Get the line description around the given position.
@@ -8981,6 +9045,9 @@ var FacetProvider = class {
       }
     };
   }
+  get extension() {
+    return this;
+  }
 };
 function compareArray(a3, b3, compare2) {
   if (a3.length != b3.length)
@@ -9155,6 +9222,9 @@ var PrecExtension = class {
     this.inner = inner;
     this.prec = prec2;
   }
+  get extension() {
+    return this;
+  }
 };
 var Compartment = class _Compartment {
   /**
@@ -9183,6 +9253,9 @@ var CompartmentInstance = class {
   constructor(compartment, inner) {
     this.compartment = compartment;
     this.inner = inner;
+  }
+  get extension() {
+    return this;
   }
 };
 var Configuration = class _Configuration {
@@ -9291,6 +9364,8 @@ function flatten(extension, compartments, newCompartments) {
     } else {
       let content2 = ext.extension;
       if (!content2)
+        throw new Error(`Unrecognized extension value in extension set (${ext}).`);
+      if (content2 == ext)
         throw new Error(`Unrecognized extension value in extension set (${ext}). This sometimes happens because multiple instances of @codemirror/state are loaded, breaking instanceof checks.`);
       inner(content2, prec2);
     }
@@ -11075,7 +11150,7 @@ function add(elt, child) {
   }
 }
 
-// node_modules/.pnpm/@codemirror+view@6.43.4/node_modules/@codemirror/view/dist/index.js
+// node_modules/.pnpm/@codemirror+view@6.43.6/node_modules/@codemirror/view/dist/index.js
 var nav = typeof navigator != "undefined" ? navigator : { userAgent: "", vendor: "", platform: "" };
 var doc = typeof document != "undefined" ? document : { documentElement: { style: {} } };
 var ie_edge = /* @__PURE__ */ /Edge\/(\d+)/.exec(nav.userAgent);
@@ -11512,8 +11587,11 @@ function scanFor(node, off, targetNode, targetOff, dir) {
 function maxOffset(node) {
   return node.nodeType == 3 ? node.nodeValue.length : node.childNodes.length;
 }
-function flattenRect(rect, left) {
-  let x3 = left ? rect.left : rect.right;
+function flattenRect(rect, toLeft) {
+  let { left, right } = rect;
+  if (left == right)
+    return rect;
+  let x3 = toLeft ? left : right;
   return { left: x3, right: x3, top: rect.top, bottom: rect.bottom };
 }
 function windowRect(win) {
@@ -12595,7 +12673,7 @@ var Tile = class {
   covers(side) {
     return true;
   }
-  coordsIn(pos, side) {
+  coordsIn(pos, side, rtl) {
     return null;
   }
   domPosFor(off, side) {
@@ -12803,7 +12881,7 @@ var LineTile = class _LineTile extends CompositeTile {
         if (end3 >= pos2) {
           if (child.isComposite()) {
             scan(child, pos2 - off);
-          } else if ((!after || after.isHidden && (side > 0 || forCoords && onSameLine(after, child))) && (end3 > pos2 || child.flags & 32)) {
+          } else if ((!after || after.isHidden && (side > 0 && !(after.flags & 32) || forCoords && onSameLine(after, child))) && (end3 > pos2 || child.flags & 32)) {
             after = child;
             afterOff = pos2 - off;
           } else if (off < pos2 || child.flags & 16 && !child.isHidden) {
@@ -12818,11 +12896,11 @@ var LineTile = class _LineTile extends CompositeTile {
     let target = (side < 0 ? before : after) || before || after;
     return target ? { tile: target, offset: target == before ? beforeOff : afterOff } : null;
   }
-  coordsIn(pos, side) {
+  coordsIn(pos, side, rtl) {
     let found = this.resolveInline(pos, side, true);
     if (!found)
       return fallbackRect(this);
-    return found.tile.coordsIn(Math.max(0, found.offset), side);
+    return found.tile.coordsIn(Math.max(0, found.offset), side, rtl);
   }
   domIn(pos, side) {
     let found = this.resolveInline(pos, side);
@@ -12892,7 +12970,7 @@ var TextTile = class _TextTile extends Tile {
   toString() {
     return JSON.stringify(this.text);
   }
-  coordsIn(pos, side) {
+  coordsIn(pos, side, rtl) {
     let length = this.dom.nodeValue.length;
     if (pos > length)
       pos = length;
@@ -12919,7 +12997,7 @@ var TextTile = class _TextTile extends Tile {
     let rect = rects[(flatten2 ? flatten2 < 0 : side >= 0) ? 0 : rects.length - 1];
     if (browser.safari && !flatten2 && rect.width == 0)
       rect = Array.prototype.find.call(rects, (r5) => r5.width) || rect;
-    return flatten2 ? flattenRect(rect, flatten2 < 0) : rect || null;
+    return rtl == null ? rect : flattenRect(rect, (flatten2 ? flatten2 > 0 : side < 0) == rtl);
   }
   static of(text2, dom2) {
     let tile = new _TextTile(dom2 || document.createTextNode(text2), text2);
@@ -13001,8 +13079,9 @@ var WidgetBufferTile = class extends Tile {
   get overrideDOMText() {
     return Text.empty;
   }
-  coordsIn(pos) {
-    return this.dom.getBoundingClientRect();
+  coordsIn(pos, side, rtl) {
+    let rect = this.dom.getBoundingClientRect();
+    return rtl == null ? rect : flattenRect(rect, side > 0 == rtl);
   }
 };
 var TilePointer = class {
@@ -13362,7 +13441,7 @@ var TileCache = class {
   find(cls, test, type = 2) {
     let i3 = cls.bucket;
     let bucket = this.buckets[i3], off = this.index[i3];
-    for (let j3 = bucket.length - 1; j3 >= 0; j3--) {
+    for (let j3 = 0; j3 < bucket.length; j3++) {
       let index = (j3 + off) % bucket.length, tile = bucket[index];
       if ((!test || test(tile)) && !this.reused.has(tile)) {
         bucket.splice(index, 1);
@@ -13567,7 +13646,7 @@ var TileUpdate = class {
   }
   emit(from, to) {
     let pendingLineAttrs = null;
-    let b3 = this.builder, markCount = 0;
+    let b3 = this.builder, markCount = -1;
     let openEnd = RangeSet.spans(this.decorations, from, to, {
       point: (from2, to2, deco, active, openStart, index) => {
         if (deco instanceof PointDecoration) {
@@ -13617,7 +13696,8 @@ var TileUpdate = class {
         markCount = active.length;
       }
     });
-    this.openWidget = openEnd > markCount;
+    if (markCount > -1)
+      this.openWidget = openEnd > markCount;
     if (!this.openWidget)
       b3.addLineStartIfNotCovered(pendingLineAttrs);
     this.openMarks = openEnd;
@@ -13986,7 +14066,7 @@ var DocView = class {
   domAtPos(pos, side) {
     let { tile, offset } = this.tile.resolveBlock(pos, side);
     if (tile.isWidget())
-      return tile.domPosFor(pos, side);
+      return tile.domPosFor(offset, side);
     return tile.domIn(offset, side);
   }
   inlineDOMNearPos(pos, side) {
@@ -14022,14 +14102,16 @@ var DocView = class {
       after = null;
     return before && side < 0 || !after ? before.domIn(beforeOff, side) : after.domIn(afterOff, side);
   }
-  coordsAt(pos, side) {
+  // Get the coord of the element at the given side of the given
+  // position. If rtl is given, flatten it using that text direction.
+  coordsAt(pos, side, rtl) {
     let { tile, offset } = this.tile.resolveBlock(pos, side);
     if (tile.isWidget()) {
       if (tile.widget instanceof BlockGapWidget)
         return null;
       return tile.coordsInWidget(offset, side, true);
     }
-    return tile.coordsIn(offset, side);
+    return tile.coordsIn(offset, side, rtl);
   }
   lineAt(pos, side) {
     let { tile } = this.tile.resolveBlock(pos, side);
@@ -14200,7 +14282,6 @@ var DocView = class {
     this.blockWrappers = this.view.state.facet(blockWrappers).map((v3) => typeof v3 == "function" ? v3(this.view) : v3);
   }
   scrollIntoView(target) {
-    var _a2;
     if (target.isSnapshot) {
       let ref = this.view.viewState.lineBlockAt(target.range.head);
       this.view.scrollDOM.scrollTop = ref.top - target.yMargin;
@@ -14216,7 +14297,7 @@ var DocView = class {
       }
     }
     let { range } = target;
-    let rect = this.coordsAt(range.head, (_a2 = range.assoc) !== null && _a2 !== void 0 ? _a2 : range.empty ? 0 : range.head > range.anchor ? -1 : 1), other;
+    let rect = this.coordsAt(range.head, range.assoc || (range.head > range.anchor ? -1 : 1)), other;
     if (!rect)
       return;
     if (!range.empty && (other = this.coordsAt(range.anchor, range.anchor > range.head ? -1 : 1)))
@@ -15163,6 +15244,7 @@ var InputState = class {
     this.view = view;
     this.lastKeyCode = 0;
     this.lastKeyTime = 0;
+    this.touchActive = false;
     this.lastTouchTime = 0;
     this.lastTouchX = 0;
     this.lastTouchY = 0;
@@ -15171,6 +15253,7 @@ var InputState = class {
     this.lastScrollLeft = 0;
     this.lastWheelEvent = 0;
     this.pendingIOSKey = void 0;
+    this.lastIOSMomentumScroll = 0;
     this.tabFocusMode = -1;
     this.lastSelectionOrigin = null;
     this.lastSelectionTime = 0;
@@ -15542,8 +15625,11 @@ function doPaste(view, input) {
   });
 }
 observers.scroll = (view) => {
-  view.inputState.lastScrollTop = view.scrollDOM.scrollTop;
-  view.inputState.lastScrollLeft = view.scrollDOM.scrollLeft;
+  let iState = view.inputState;
+  iState.lastScrollTop = view.scrollDOM.scrollTop;
+  iState.lastScrollLeft = view.scrollDOM.scrollLeft;
+  if (browser.ios && !iState.touchActive)
+    iState.lastIOSMomentumScroll = Date.now();
 };
 observers.wheel = observers.mousewheel = (view) => {
   view.inputState.lastWheelEvent = Date.now();
@@ -15556,6 +15642,7 @@ handlers.keydown = (view, event) => {
 };
 observers.touchstart = (view, e4) => {
   let iState = view.inputState, touch = e4.targetTouches[0];
+  iState.touchActive = true;
   iState.lastTouchTime = Date.now();
   if (touch) {
     iState.lastTouchX = touch.clientX;
@@ -15565,6 +15652,9 @@ observers.touchstart = (view, e4) => {
 };
 observers.touchmove = (view) => {
   view.inputState.setSelectionOrigin("select.pointer");
+};
+observers.touchend = (view, e4) => {
+  view.inputState.touchActive = false;
 };
 handlers.mousedown = (view, event) => {
   view.observer.flush();
@@ -18607,7 +18697,7 @@ var EditorView = class _EditorView {
             } else {
               let newAnchorHeight = scrollAnchorPos < 0 ? this.viewState.heightMap.height : this.viewState.lineBlockAt(scrollAnchorPos).top;
               let diff = (newAnchorHeight - scrollAnchorHeight) / this.scaleY;
-              if ((diff > 1 || diff < -1) && (scroll == this.scrollDOM || this.hasFocus || Math.max(this.inputState.lastWheelEvent, this.inputState.lastTouchTime) > Date.now() - 100)) {
+              if ((diff > 1 || diff < -1) && !(browser.ios && this.inputState.lastIOSMomentumScroll > Date.now() - 100) && (scroll == this.scrollDOM || this.hasFocus || Math.max(this.inputState.lastWheelEvent, this.inputState.lastTouchTime) > Date.now() - 100)) {
                 scrollOffset = scrollOffset + diff;
                 if (scroll)
                   scroll.scrollTop += diff;
@@ -18898,12 +18988,9 @@ var EditorView = class _EditorView {
   */
   coordsAtPos(pos, side = 1) {
     this.readMeasured();
-    let rect = this.docView.coordsAt(pos, side);
-    if (!rect || rect.left == rect.right)
-      return rect;
     let line = this.state.doc.lineAt(pos), order = this.bidiSpans(line);
     let span = order[BidiSpan.find(order, pos - line.from, -1, side)];
-    return flattenRect(rect, span.dir == Direction.LTR == side > 0);
+    return this.docView.coordsAt(pos, side, span.dir == Direction.RTL);
   }
   /**
   Return the rectangle around a given character. If `pos` does not
@@ -31587,10 +31674,10 @@ function _objectWithoutPropertiesLoose(r5, e4) {
   return t4;
 }
 
-// node_modules/.pnpm/@uiw+react-codemirror@4.25.10_@babel+runtime@8.0.0_@codemirror+autocomplete@6.20.3_@cod_e67f98ff469220c0ad9bb15b36961e8d/node_modules/@uiw/react-codemirror/esm/index.js
+// node_modules/.pnpm/@uiw+react-codemirror@4.25.11_@babel+runtime@8.0.0_@codemirror+autocomplete@6.20.3_@cod_55e24c1b1fe883c7a92f6e471147abd4/node_modules/@uiw/react-codemirror/esm/index.js
 import React3, { useRef as useRef2, forwardRef as forwardRef2, useImperativeHandle as useImperativeHandle2, useCallback as useCallback2 } from "react";
 
-// node_modules/.pnpm/@uiw+react-codemirror@4.25.10_@babel+runtime@8.0.0_@codemirror+autocomplete@6.20.3_@cod_e67f98ff469220c0ad9bb15b36961e8d/node_modules/@uiw/react-codemirror/esm/useCodeMirror.js
+// node_modules/.pnpm/@uiw+react-codemirror@4.25.11_@babel+runtime@8.0.0_@codemirror+autocomplete@6.20.3_@cod_55e24c1b1fe883c7a92f6e471147abd4/node_modules/@uiw/react-codemirror/esm/useCodeMirror.js
 import { useEffect as useEffect2, useLayoutEffect as useLayoutEffect2, useState as useState2 } from "react";
 
 // node_modules/.pnpm/@codemirror+commands@6.10.4/node_modules/@codemirror/commands/dist/index.js
@@ -34450,7 +34537,7 @@ var lintExtensions = [
   baseTheme5
 ];
 
-// node_modules/.pnpm/@uiw+codemirror-extensions-basic-setup@4.25.10_@codemirror+autocomplete@6.20.3_@codemir_35bc3747dc8fbee6cd7841a4dd7c4a5b/node_modules/@uiw/codemirror-extensions-basic-setup/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-extensions-basic-setup@4.25.11_@codemirror+autocomplete@6.20.3_@codemir_cda5087df543a8f800cc1af753b88d58/node_modules/@uiw/codemirror-extensions-basic-setup/esm/index.js
 var basicSetup = function basicSetup2(options) {
   if (options === void 0) {
     options = {};
@@ -34646,7 +34733,7 @@ var oneDarkHighlightStyle = /* @__PURE__ */ HighlightStyle.define([
 ]);
 var oneDark = [oneDarkTheme, /* @__PURE__ */ syntaxHighlighting(oneDarkHighlightStyle)];
 
-// node_modules/.pnpm/@uiw+react-codemirror@4.25.10_@babel+runtime@8.0.0_@codemirror+autocomplete@6.20.3_@cod_e67f98ff469220c0ad9bb15b36961e8d/node_modules/@uiw/react-codemirror/esm/theme/light.js
+// node_modules/.pnpm/@uiw+react-codemirror@4.25.11_@babel+runtime@8.0.0_@codemirror+autocomplete@6.20.3_@cod_55e24c1b1fe883c7a92f6e471147abd4/node_modules/@uiw/react-codemirror/esm/theme/light.js
 var defaultLightThemeOption = EditorView.theme({
   "&": {
     backgroundColor: "#fff"
@@ -34655,7 +34742,7 @@ var defaultLightThemeOption = EditorView.theme({
   dark: false
 });
 
-// node_modules/.pnpm/@uiw+react-codemirror@4.25.10_@babel+runtime@8.0.0_@codemirror+autocomplete@6.20.3_@cod_e67f98ff469220c0ad9bb15b36961e8d/node_modules/@uiw/react-codemirror/esm/getDefaultExtensions.js
+// node_modules/.pnpm/@uiw+react-codemirror@4.25.11_@babel+runtime@8.0.0_@codemirror+autocomplete@6.20.3_@cod_55e24c1b1fe883c7a92f6e471147abd4/node_modules/@uiw/react-codemirror/esm/getDefaultExtensions.js
 var getDefaultExtensions = function getDefaultExtensions2(optios) {
   if (optios === void 0) {
     optios = {};
@@ -34697,7 +34784,7 @@ var getDefaultExtensions = function getDefaultExtensions2(optios) {
   return [...getExtensions];
 };
 
-// node_modules/.pnpm/@uiw+react-codemirror@4.25.10_@babel+runtime@8.0.0_@codemirror+autocomplete@6.20.3_@cod_e67f98ff469220c0ad9bb15b36961e8d/node_modules/@uiw/react-codemirror/esm/utils.js
+// node_modules/.pnpm/@uiw+react-codemirror@4.25.11_@babel+runtime@8.0.0_@codemirror+autocomplete@6.20.3_@cod_55e24c1b1fe883c7a92f6e471147abd4/node_modules/@uiw/react-codemirror/esm/utils.js
 var getStatistics = (view) => {
   return {
     line: view.state.doc.lineAt(view.state.selection.main.from),
@@ -34715,7 +34802,7 @@ var getStatistics = (view) => {
   };
 };
 
-// node_modules/.pnpm/@uiw+react-codemirror@4.25.10_@babel+runtime@8.0.0_@codemirror+autocomplete@6.20.3_@cod_e67f98ff469220c0ad9bb15b36961e8d/node_modules/@uiw/react-codemirror/esm/timeoutLatch.js
+// node_modules/.pnpm/@uiw+react-codemirror@4.25.11_@babel+runtime@8.0.0_@codemirror+autocomplete@6.20.3_@cod_55e24c1b1fe883c7a92f6e471147abd4/node_modules/@uiw/react-codemirror/esm/timeoutLatch.js
 var TimeoutLatch = class {
   constructor(callback, timeoutMS) {
     this.timeLeftMS = void 0;
@@ -34802,7 +34889,44 @@ var getScheduler = () => {
   return globalScheduler;
 };
 
-// node_modules/.pnpm/@uiw+react-codemirror@4.25.10_@babel+runtime@8.0.0_@codemirror+autocomplete@6.20.3_@cod_e67f98ff469220c0ad9bb15b36961e8d/node_modules/@uiw/react-codemirror/esm/useCodeMirror.js
+// node_modules/.pnpm/@uiw+react-codemirror@4.25.11_@babel+runtime@8.0.0_@codemirror+autocomplete@6.20.3_@cod_55e24c1b1fe883c7a92f6e471147abd4/node_modules/@uiw/react-codemirror/esm/theme/dimensionTheme.js
+var scrollerTheme = EditorView.theme({
+  "& .cm-scroller": {
+    height: "100% !important"
+  }
+});
+var lastDimensionKey = null;
+var lastDimensionTheme = null;
+function getDimensionTheme(height, minHeight, maxHeight, width, minWidth, maxWidth) {
+  if (!height && !minHeight && !maxHeight && !width && !minWidth && !maxWidth) {
+    return null;
+  }
+  var cacheKey = JSON.stringify({
+    height,
+    minHeight,
+    maxHeight,
+    width,
+    minWidth,
+    maxWidth
+  });
+  if (cacheKey === lastDimensionKey) {
+    return lastDimensionTheme;
+  }
+  lastDimensionKey = cacheKey;
+  lastDimensionTheme = EditorView.theme({
+    "&": {
+      height,
+      minHeight,
+      maxHeight,
+      width,
+      minWidth,
+      maxWidth
+    }
+  });
+  return lastDimensionTheme;
+}
+
+// node_modules/.pnpm/@uiw+react-codemirror@4.25.11_@babel+runtime@8.0.0_@codemirror+autocomplete@6.20.3_@cod_55e24c1b1fe883c7a92f6e471147abd4/node_modules/@uiw/react-codemirror/esm/useCodeMirror.js
 var ExternalChange = Annotation.define();
 var TYPING_TIMOUT = 200;
 var emptyExtensions = [];
@@ -34817,19 +34941,7 @@ function useCodeMirror(props) {
   var pendingUpdate = useState2(() => ({
     current: null
   }))[0];
-  var defaultThemeOption = EditorView.theme({
-    "&": {
-      height,
-      minHeight,
-      maxHeight,
-      width,
-      minWidth,
-      maxWidth
-    },
-    "& .cm-scroller": {
-      height: "100% !important"
-    }
-  });
+  var defaultThemeOption = getDimensionTheme(height, minHeight, maxHeight, width, minWidth, maxWidth);
   var updateListener2 = EditorView.updateListener.of((vu) => {
     if (vu.docChanged && typeof onChange2 === "function" && // Fix echoing of the remote changes:
     // If transaction is market as remote we don't have to call `onChange` handler again
@@ -34861,7 +34973,7 @@ function useCodeMirror(props) {
     indentWithTab: defaultIndentWithTab,
     basicSetup: defaultBasicSetup
   });
-  var getExtensions = [updateListener2, defaultThemeOption, ...defaultExtensions];
+  var getExtensions = [updateListener2, ...defaultThemeOption ? [defaultThemeOption] : [], scrollerTheme, ...defaultExtensions];
   if (onUpdate && typeof onUpdate === "function") {
     getExtensions.push(EditorView.updateListener.of(onUpdate));
   }
@@ -34955,7 +35067,7 @@ function useCodeMirror(props) {
   };
 }
 
-// node_modules/.pnpm/@uiw+react-codemirror@4.25.10_@babel+runtime@8.0.0_@codemirror+autocomplete@6.20.3_@cod_e67f98ff469220c0ad9bb15b36961e8d/node_modules/@uiw/react-codemirror/esm/index.js
+// node_modules/.pnpm/@uiw+react-codemirror@4.25.11_@babel+runtime@8.0.0_@codemirror+autocomplete@6.20.3_@cod_55e24c1b1fe883c7a92f6e471147abd4/node_modules/@uiw/react-codemirror/esm/index.js
 var _excluded = ["className", "value", "selection", "extensions", "onChange", "onStatistics", "onCreateEditor", "onUpdate", "autoFocus", "theme", "height", "minHeight", "maxHeight", "width", "minWidth", "maxWidth", "basicSetup", "placeholder", "indentWithTab", "editable", "readOnly", "root", "initialState"];
 var ReactCodeMirror = /* @__PURE__ */ forwardRef2((props, ref) => {
   var className = props.className, _props$value = props.value, value = _props$value === void 0 ? "" : _props$value, selection2 = props.selection, _props$extensions = props.extensions, extensions = _props$extensions === void 0 ? [] : _props$extensions, onChange2 = props.onChange, onStatistics = props.onStatistics, onCreateEditor = props.onCreateEditor, onUpdate = props.onUpdate, autoFocus = props.autoFocus, _props$theme = props.theme, theme2 = _props$theme === void 0 ? "light" : _props$theme, height = props.height, minHeight = props.minHeight, maxHeight = props.maxHeight, width = props.width, minWidth = props.minWidth, maxWidth = props.maxWidth, basicSetup3 = props.basicSetup, placeholder2 = props.placeholder, indentWithTab2 = props.indentWithTab, editable2 = props.editable, readOnly2 = props.readOnly, root = props.root, initialState = props.initialState, other = _objectWithoutPropertiesLoose(props, _excluded);
@@ -35005,7 +35117,7 @@ var ReactCodeMirror = /* @__PURE__ */ forwardRef2((props, ref) => {
 ReactCodeMirror.displayName = "CodeMirror";
 var esm_default = ReactCodeMirror;
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/ui/codeEditorSettings.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/ui/codeEditorSettings.js
 var DEFAULT_CODE_EDITOR_FONT_SIZE = "16px";
 var MIN_CODE_EDITOR_FONT_SIZE_PX = 14;
 var DEFAULT_CODE_EDITOR_SETUP = {
@@ -36923,7 +37035,7 @@ var e3 = { airline: { airline: [{ name: `Aegean Airlines`, iataCode: `A3` }, { n
 // node_modules/.pnpm/@faker-js+faker@10.5.0/node_modules/@faker-js/faker/dist/locale/en.js
 var r4 = new yt({ locale: [e3, Ct] });
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/variables/dynamic.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/variables/dynamic.js
 function categoryImageUrl(category) {
   return r4.image.urlLoremFlickr({ category });
 }
@@ -37430,7 +37542,7 @@ function resolveDynamicVariable(key) {
 }
 var DYNAMIC_VARIABLE_NAMES = Object.keys(DYNAMIC_VARIABLES).sort();
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/variables/filters.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/variables/filters.js
 var FILTERS = {
   upper: (value) => value.toUpperCase(),
   lower: (value) => value.toLowerCase(),
@@ -37465,7 +37577,7 @@ function applyFilters(value, filters) {
   return current;
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/variables/tokens.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/variables/tokens.js
 var VARIABLE_NAME_CHARS = "\\w$.-";
 var VARIABLE_TOKEN_PATTERN = new RegExp(`\\{\\{\\s*([${VARIABLE_NAME_CHARS}]+)(\\s*\\|\\s*[${VARIABLE_NAME_CHARS}]+)*\\s*\\}\\}`, "g");
 var VALID_NAME_PATTERN = new RegExp(`^[${VARIABLE_NAME_CHARS}]+$`);
@@ -37570,7 +37682,7 @@ function substituteVariablesFromMap(text2, runtimeVars) {
   return substituteWithResolver(text2, (key) => runtimeVars[key]);
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/components/VariableTooltip/dom.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/components/VariableTooltip/dom.js
 var COPY_ICON_PATH = "M208 0H332.1c12.7 0 24.9 5.1 33.9 14.1l67.9 67.9c9 9 14.1 21.2 14.1 33.9V336c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V48c0-26.5 21.5-48 48-48zM48 128h80v64H64v256h192v-32h64v48c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V176c0-26.5 21.5-48 48-48z";
 var CHECK_ICON_PATH = "M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z";
 function createTooltipIcon(path) {
@@ -37641,7 +37753,7 @@ function buildVariableTooltipDom(key, variables, onEditVariable) {
   return dom2;
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/components/VariableTooltip/VariableTooltipValue.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/components/VariableTooltip/VariableTooltipValue.js
 function VariableTooltipValue({ value, variableKey, muted, onClose }) {
   const [copied, setCopied] = useState(false);
   const handleCopy = () => {
@@ -37657,7 +37769,7 @@ function VariableTooltipValue({ value, variableKey, muted, onClose }) {
   }, onClick: onClose, children: jsx(FaIcon, { icon: faXmark, className: "h-4 w-4" }) })] });
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/runtime/store.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/runtime/store.js
 function createExternalStore(initial2) {
   let state = initial2;
   const listeners = /* @__PURE__ */ new Set();
@@ -37678,7 +37790,7 @@ function createExternalStore(initial2) {
   };
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/components/CodeEditor/config.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/components/CodeEditor/config.js
 var DEFAULT_CODE_EDITOR_CONFIG = {
   theme: "default",
   setup: DEFAULT_CODE_EDITOR_SETUP,
@@ -37706,7 +37818,7 @@ function useCodeEditorConfig() {
   return contextValue ?? storeValue;
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/components/CodeEditor/editorChrome.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/components/CodeEditor/editorChrome.js
 var lightHighlight = HighlightStyle.define([
   { tag: tags.propertyName, color: "#881391" },
   { tag: tags.string, color: "#c41a16" },
@@ -37871,7 +37983,7 @@ function createBuiltInSyntaxHighlighting(isDark) {
   return syntaxHighlighting(isDark ? darkHighlight : lightHighlight);
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/components/CodeEditor/slashCommandHighlighter.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/components/CodeEditor/slashCommandHighlighter.js
 function slashCommandHighlightPattern(commands) {
   const names = commands.map((entry) => entry.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
   if (names.length === 0) {
@@ -37918,7 +38030,7 @@ function createSlashCommandHighlighter(commands) {
   }, { decorations: (v3) => v3.decorations });
 }
 
-// node_modules/.pnpm/@uiw+codemirror-themes@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-themes/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-themes@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-themes/esm/index.js
 var createTheme = (_ref2) => {
   var theme2 = _ref2.theme, _ref$settings = _ref2.settings, settings = _ref$settings === void 0 ? {} : _ref$settings, _ref$styles = _ref2.styles, styles2 = _ref$styles === void 0 ? [] : _ref$styles;
   var themeOptions = {
@@ -37991,7 +38103,7 @@ var createTheme = (_ref2) => {
   return extension;
 };
 
-// node_modules/.pnpm/@uiw+codemirror-theme-abcdef@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-abcdef/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-abcdef@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-abcdef/esm/index.js
 var defaultSettingsAbcdef = {
   background: "#0f0f0f",
   foreground: "#defdef",
@@ -38080,7 +38192,7 @@ var abcdefInit = (options) => {
 };
 var abcdef = abcdefInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-abyss@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-abyss/esm/color.js
+// node_modules/.pnpm/@uiw+codemirror-theme-abyss@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-abyss/esm/color.js
 var config3 = {
   background: "#000c18",
   foreground: "#6688cc",
@@ -38107,7 +38219,7 @@ var config3 = {
   tag: "#225588"
 };
 
-// node_modules/.pnpm/@uiw+codemirror-theme-abyss@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-abyss/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-abyss@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-abyss/esm/index.js
 var defaultSettingsAbyss = {
   background: config3.background,
   foreground: config3.foreground,
@@ -38194,7 +38306,7 @@ var abyssInit = (options) => {
 };
 var abyss = abyssInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-androidstudio@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-androidstudio/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-androidstudio@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-androidstudio/esm/index.js
 var defaultSettingsAndroidstudio = {
   background: "#282b2e",
   foreground: "#a9b7c6",
@@ -38241,7 +38353,7 @@ var androidstudioInit = (options) => {
 };
 var androidstudio = androidstudioInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-andromeda@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-andromeda/esm/color.js
+// node_modules/.pnpm/@uiw+codemirror-theme-andromeda@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-andromeda/esm/color.js
 var config4 = {
   background: "#23262E",
   foreground: "#D5CED9",
@@ -38269,7 +38381,7 @@ var config4 = {
   tag: "#f92672"
 };
 
-// node_modules/.pnpm/@uiw+codemirror-theme-andromeda@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-andromeda/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-andromeda@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-andromeda/esm/index.js
 var defaultSettingsAndromeda = {
   background: config4.background,
   foreground: config4.foreground,
@@ -38359,7 +38471,7 @@ var andromedaInit = (options) => {
 };
 var andromeda = andromedaInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-atomone@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-atomone/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-atomone@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-atomone/esm/index.js
 var defaultSettingsAtomone = {
   background: "#272C35",
   foreground: "#9d9b97",
@@ -38406,7 +38518,7 @@ var atomoneInit = (options) => {
 };
 var atomone = atomoneInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-aura@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-aura/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-aura@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-aura/esm/index.js
 var defaultSettingsAura = {
   background: "#21202e",
   foreground: "#edecee",
@@ -38490,7 +38602,7 @@ var auraInit = (options) => {
 };
 var aura = auraInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-basic@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-basic/esm/dark.js
+// node_modules/.pnpm/@uiw+codemirror-theme-basic@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-basic/esm/dark.js
 var defaultSettingsBasicDark = {
   background: "#2E3235",
   foreground: "#DDDDDD",
@@ -38631,7 +38743,7 @@ var basicDarkInit = (options) => {
 };
 var basicDark = basicDarkInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-basic@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-basic/esm/light.js
+// node_modules/.pnpm/@uiw+codemirror-theme-basic@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-basic/esm/light.js
 var defaultSettingsBasicLight = {
   background: "#ffffff",
   foreground: "#2e3440",
@@ -38769,7 +38881,7 @@ var basicLightInit = (options) => {
 };
 var basicLight = basicLightInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-bbedit@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-bbedit/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-bbedit@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-bbedit/esm/index.js
 var defaultSettingsBbedit = {
   background: "#FFFFFF",
   foreground: "#000000",
@@ -38831,7 +38943,7 @@ var bbeditInit = (options) => {
 };
 var bbedit = bbeditInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-bespin@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-bespin/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-bespin@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-bespin/esm/index.js
 var defaultSettingsBespin = {
   background: "#28211c",
   foreground: "#9d9b97",
@@ -38880,7 +38992,7 @@ var bespinInit = (options) => {
 };
 var bespin = bespinInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-console@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-console/esm/dark.js
+// node_modules/.pnpm/@uiw+codemirror-theme-console@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-console/esm/dark.js
 var defaultSettingsConsoleDark = {
   background: "#000",
   foreground: "#fff",
@@ -38902,7 +39014,7 @@ var consoleDarkInit = (options) => {
 };
 var consoleDark = consoleDarkInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-console@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-console/esm/light.js
+// node_modules/.pnpm/@uiw+codemirror-theme-console@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-console/esm/light.js
 var defaultSettingsConsoleLight = {
   background: "#fff",
   foreground: "#000",
@@ -38924,7 +39036,7 @@ var consoleLightInit = (options) => {
 };
 var consoleLight = consoleLightInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-copilot@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-copilot/esm/color.js
+// node_modules/.pnpm/@uiw+codemirror-theme-copilot@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-copilot/esm/color.js
 var config5 = {
   background: "#232a2f",
   foreground: "#939da5",
@@ -38951,7 +39063,7 @@ var config5 = {
   tag: "#ff6a80"
 };
 
-// node_modules/.pnpm/@uiw+codemirror-theme-copilot@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-copilot/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-copilot@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-copilot/esm/index.js
 var defaultSettingsCopilot = {
   background: config5.background,
   foreground: config5.foreground,
@@ -39041,7 +39153,7 @@ var copilotInit = (options) => {
 };
 var copilot = copilotInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-darcula@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-darcula/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-darcula@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-darcula/esm/index.js
 var defaultSettingsDarcula = {
   background: "#2B2B2B",
   foreground: "#f8f8f2",
@@ -39091,7 +39203,7 @@ var darculaInit = (options) => {
 };
 var darcula = darculaInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-dracula@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-dracula/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-dracula@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-dracula/esm/index.js
 var defaultSettingsDracula = {
   background: "#282a36",
   foreground: "#f8f8f2",
@@ -39138,7 +39250,7 @@ var draculaInit = (options) => {
 };
 var dracula = draculaInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-duotone@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-duotone/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-duotone@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-duotone/esm/index.js
 var defaultSettingsDuotoneLight = {
   background: "#faf8f5",
   foreground: "#b29762",
@@ -39226,7 +39338,7 @@ var duotoneDarkInit = (options) => {
 };
 var duotoneDark = duotoneDarkInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-eclipse@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-eclipse/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-eclipse@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-eclipse/esm/index.js
 var defaultSettingsEclipse = {
   background: "#fff",
   foreground: "#000",
@@ -39289,7 +39401,7 @@ var eclipseInit = (options) => {
 };
 var eclipse = eclipseInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-github@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-github/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-github@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-github/esm/index.js
 var defaultSettingsGithubLight = {
   background: "#fff",
   foreground: "#24292e",
@@ -39420,7 +39532,7 @@ var githubDarkInit = (options) => {
 };
 var githubDark = githubDarkInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-gruvbox-dark@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-gruvbox-dark/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-gruvbox-dark@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-gruvbox-dark/esm/index.js
 var defaultSettingsGruvboxDark = {
   background: "#282828",
   foreground: "#ebdbb2",
@@ -39688,7 +39800,7 @@ var gruvboxLightInit = (options) => {
 };
 var gruvboxLight = gruvboxLightInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-kimbie@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-kimbie/esm/color.js
+// node_modules/.pnpm/@uiw+codemirror-theme-kimbie@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-kimbie/esm/color.js
 var config6 = {
   background: "#221a0f",
   foreground: "#d3af86",
@@ -39715,7 +39827,7 @@ var config6 = {
   tag: "#dc3958"
 };
 
-// node_modules/.pnpm/@uiw+codemirror-theme-kimbie@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-kimbie/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-kimbie@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-kimbie/esm/index.js
 var defaultSettingsKimbie = {
   background: config6.background,
   foreground: config6.foreground,
@@ -39802,7 +39914,7 @@ var kimbieInit = (options) => {
 };
 var kimbie = kimbieInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-material@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-material/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-material@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-material/esm/index.js
 var defaultSettingsMaterial = {
   background: "#2e3235",
   foreground: "#bdbdbd",
@@ -40026,7 +40138,7 @@ var materialLightInit = (options) => {
 };
 var materialLight = materialLightInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-monokai@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-monokai/esm/color.js
+// node_modules/.pnpm/@uiw+codemirror-theme-monokai@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-monokai/esm/color.js
 var config7 = {
   background: "#272822",
   foreground: "#f8f8f2",
@@ -40053,7 +40165,7 @@ var config7 = {
   tag: "#F92672"
 };
 
-// node_modules/.pnpm/@uiw+codemirror-theme-monokai@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-monokai/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-monokai@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-monokai/esm/index.js
 var defaultSettingsMonokai = {
   background: config7.background,
   foreground: config7.foreground,
@@ -40140,7 +40252,7 @@ var monokaiInit = (options) => {
 };
 var monokai = monokaiInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-monokai-dimmed@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-monokai-dimmed/esm/color.js
+// node_modules/.pnpm/@uiw+codemirror-theme-monokai-dimmed@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-monokai-dimmed/esm/color.js
 var config8 = {
   background: "#1e1e1e",
   foreground: "#c5c8c6",
@@ -40167,7 +40279,7 @@ var config8 = {
   tag: "#6089B4"
 };
 
-// node_modules/.pnpm/@uiw+codemirror-theme-monokai-dimmed@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-monokai-dimmed/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-monokai-dimmed@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-monokai-dimmed/esm/index.js
 var defaultSettingsMonokaiDimmed = {
   background: config8.background,
   foreground: config8.foreground,
@@ -40254,7 +40366,7 @@ var monokaiDimmedInit = (options) => {
 };
 var monokaiDimmed = monokaiDimmedInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-noctis-lilac@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-noctis-lilac/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-noctis-lilac@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-noctis-lilac/esm/index.js
 var defaultSettingsNoctisLilac = {
   background: "#f2f1f8",
   foreground: "#0c006b",
@@ -40322,7 +40434,7 @@ var noctisLilacInit = (options) => {
 };
 var noctisLilac = noctisLilacInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-nord@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-nord/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-nord@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-nord/esm/index.js
 var defaultSettingsNord = {
   background: "#2e3440",
   foreground: "#FFFFFF",
@@ -40464,7 +40576,7 @@ var nordInit = (options) => {
 };
 var nord = nordInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-okaidia@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-okaidia/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-okaidia@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-okaidia/esm/index.js
 var defaultSettingsOkaidia = {
   background: "#272822",
   foreground: "#FFFFFF",
@@ -40528,7 +40640,7 @@ var okaidiaInit = (options) => {
 };
 var okaidia = okaidiaInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-quietlight@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-quietlight/esm/color.js
+// node_modules/.pnpm/@uiw+codemirror-theme-quietlight@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-quietlight/esm/color.js
 var config9 = {
   background: "#F5F5F5",
   foreground: "#333333",
@@ -40555,7 +40667,7 @@ var config9 = {
   tag: "#4B69C6"
 };
 
-// node_modules/.pnpm/@uiw+codemirror-theme-quietlight@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-quietlight/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-quietlight@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-quietlight/esm/index.js
 var defaultSettingsQuietlight = {
   background: config9.background,
   foreground: config9.foreground,
@@ -40643,7 +40755,7 @@ var quietlightInit = (options) => {
 };
 var quietlight = quietlightInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-red@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-red/esm/color.js
+// node_modules/.pnpm/@uiw+codemirror-theme-red@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-red/esm/color.js
 var config10 = {
   background: "#390000",
   foreground: "#F8F8F8",
@@ -40670,7 +40782,7 @@ var config10 = {
   tag: "#aa5507ff"
 };
 
-// node_modules/.pnpm/@uiw+codemirror-theme-red@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-red/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-red@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-red/esm/index.js
 var defaultSettingsRed = {
   background: config10.background,
   foreground: config10.foreground,
@@ -40757,7 +40869,7 @@ var redInit = (options) => {
 };
 var red = redInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-solarized@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-solarized/esm/dark-color.js
+// node_modules/.pnpm/@uiw+codemirror-theme-solarized@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-solarized/esm/dark-color.js
 var config11 = {
   background: "#002B36",
   foreground: "#839496",
@@ -40785,7 +40897,7 @@ var config11 = {
   tag: "#268BD2"
 };
 
-// node_modules/.pnpm/@uiw+codemirror-theme-solarized@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-solarized/esm/dark.js
+// node_modules/.pnpm/@uiw+codemirror-theme-solarized@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-solarized/esm/dark.js
 var defaultSettingsSolarizedDark = {
   background: config11.background,
   foreground: config11.foreground,
@@ -40873,7 +40985,7 @@ var solarizedDarkInit = (options) => {
 };
 var solarizedDark = solarizedDarkInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-solarized@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-solarized/esm/light-color.js
+// node_modules/.pnpm/@uiw+codemirror-theme-solarized@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-solarized/esm/light-color.js
 var config12 = {
   background: "#FDF6E3",
   foreground: "#657B83",
@@ -40901,7 +41013,7 @@ var config12 = {
   tag: "#268BD2"
 };
 
-// node_modules/.pnpm/@uiw+codemirror-theme-solarized@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-solarized/esm/light.js
+// node_modules/.pnpm/@uiw+codemirror-theme-solarized@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-solarized/esm/light.js
 var defaultSettingsSolarizedLight = {
   background: config12.background,
   foreground: config12.foreground,
@@ -40989,7 +41101,7 @@ var solarizedLightInit = (options) => {
 };
 var solarizedLight = solarizedLightInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-sublime@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-sublime/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-sublime@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-sublime/esm/index.js
 var defaultSettingsSublime = {
   background: "#303841",
   foreground: "#FFFFFF",
@@ -41057,7 +41169,7 @@ function sublimeInit(options) {
 }
 var sublime = sublimeInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-tokyo-night@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-tokyo-night/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-tokyo-night@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-tokyo-night/esm/index.js
 var defaultSettingsTokyoNight = {
   background: "#1a1b26",
   foreground: "#787c99",
@@ -41141,7 +41253,7 @@ var tokyoNightInit = (options) => {
 };
 var tokyoNight = tokyoNightInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-tokyo-night-storm@4.25.10_@codemirror+language@6.12.4_@codemirror_47d6ef2cc4dd2797e9fbb435e715e721/node_modules/@uiw/codemirror-theme-tokyo-night-storm/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-tokyo-night-storm@4.25.11_@codemirror+language@6.12.4_@codemirror_f6842037a019814d5772c5bd323d4937/node_modules/@uiw/codemirror-theme-tokyo-night-storm/esm/index.js
 var defaultSettingsTokyoNightStorm = {
   background: "#24283b",
   foreground: "#7982a9",
@@ -41226,7 +41338,7 @@ var tokyoNightStormInit = (options) => {
 };
 var tokyoNightStorm = tokyoNightStormInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-tokyo-night-day@4.25.10_@codemirror+language@6.12.4_@codemirror+s_7263284b967d2184417a9b48e6a32a16/node_modules/@uiw/codemirror-theme-tokyo-night-day/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-tokyo-night-day@4.25.11_@codemirror+language@6.12.4_@codemirror+s_b5dbc8cd84a3b87f81b2ba2940781168/node_modules/@uiw/codemirror-theme-tokyo-night-day/esm/index.js
 var defaultSettingsTokyoNightDay = {
   background: "#e1e2e7",
   foreground: "#3760bf",
@@ -41311,7 +41423,7 @@ var tokyoNightDayInit = (options) => {
 };
 var tokyoNightDay = tokyoNightDayInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-tomorrow-night-blue@4.25.10_@codemirror+language@6.12.4_@codemirr_6caebe27f8845c11b2fae9d5c9902f49/node_modules/@uiw/codemirror-theme-tomorrow-night-blue/esm/color.js
+// node_modules/.pnpm/@uiw+codemirror-theme-tomorrow-night-blue@4.25.11_@codemirror+language@6.12.4_@codemirr_666b4b1ca14d48c04698429fa2d8ecd4/node_modules/@uiw/codemirror-theme-tomorrow-night-blue/esm/color.js
 var config13 = {
   background: "#002451",
   foreground: "#ffffff",
@@ -41338,7 +41450,7 @@ var config13 = {
   tag: "#FF9DA4"
 };
 
-// node_modules/.pnpm/@uiw+codemirror-theme-tomorrow-night-blue@4.25.10_@codemirror+language@6.12.4_@codemirr_6caebe27f8845c11b2fae9d5c9902f49/node_modules/@uiw/codemirror-theme-tomorrow-night-blue/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-tomorrow-night-blue@4.25.11_@codemirror+language@6.12.4_@codemirr_666b4b1ca14d48c04698429fa2d8ecd4/node_modules/@uiw/codemirror-theme-tomorrow-night-blue/esm/index.js
 var defaultSettingsTomorrowNightBlue = {
   background: config13.background,
   foreground: config13.foreground,
@@ -41425,7 +41537,7 @@ var tomorrowNightBlueInit = (options) => {
 };
 var tomorrowNightBlue = tomorrowNightBlueInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-vscode@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-vscode/esm/light.js
+// node_modules/.pnpm/@uiw+codemirror-theme-vscode@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-vscode/esm/light.js
 var defaultSettingsVscodeLight = {
   background: "#ffffff",
   foreground: "#383a42",
@@ -41502,7 +41614,7 @@ function vscodeLightInit(options) {
 }
 var vscodeLight = vscodeLightInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-vscode@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-vscode/esm/dark.js
+// node_modules/.pnpm/@uiw+codemirror-theme-vscode@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-vscode/esm/dark.js
 var defaultSettingsVscodeDark = {
   background: "#1e1e1e",
   foreground: "#9cdcfe",
@@ -41579,7 +41691,7 @@ function vscodeDarkInit(options) {
 }
 var vscodeDark = vscodeDarkInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-white@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-white/esm/dark-color.js
+// node_modules/.pnpm/@uiw+codemirror-theme-white@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-white/esm/dark-color.js
 var config14 = {
   background: "#000",
   foreground: "#fff",
@@ -41607,7 +41719,7 @@ var config14 = {
   tag: null
 };
 
-// node_modules/.pnpm/@uiw+codemirror-theme-white@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-white/esm/dark.js
+// node_modules/.pnpm/@uiw+codemirror-theme-white@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-white/esm/dark.js
 var defaultSettingsWhiteDark = {
   background: config14.background,
   foreground: config14.foreground,
@@ -41701,7 +41813,7 @@ var whiteDarkInit = (options) => {
 };
 var whiteDark = whiteDarkInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-white@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-white/esm/light-color.js
+// node_modules/.pnpm/@uiw+codemirror-theme-white@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-white/esm/light-color.js
 var config15 = {
   background: "#fff",
   foreground: "#000",
@@ -41729,7 +41841,7 @@ var config15 = {
   tag: null
 };
 
-// node_modules/.pnpm/@uiw+codemirror-theme-white@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-white/esm/light.js
+// node_modules/.pnpm/@uiw+codemirror-theme-white@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-white/esm/light.js
 var defaultSettingsWhiteLight = {
   background: config15.background,
   foreground: config15.foreground,
@@ -41823,7 +41935,7 @@ var whiteLightInit = (options) => {
 };
 var whiteLight = whiteLightInit();
 
-// node_modules/.pnpm/@uiw+codemirror-theme-xcode@4.25.10_@codemirror+language@6.12.4_@codemirror+state@6.7.0_@codemirror+view@6.43.4/node_modules/@uiw/codemirror-theme-xcode/esm/index.js
+// node_modules/.pnpm/@uiw+codemirror-theme-xcode@4.25.11_@codemirror+language@6.12.4_@codemirror+state@6.7.1_@codemirror+view@6.43.6/node_modules/@uiw/codemirror-theme-xcode/esm/index.js
 var defaultSettingsXcodeLight = {
   background: "#fff",
   foreground: "#3D3D3D",
@@ -41915,7 +42027,7 @@ var xcodeDarkInit = (options) => {
 };
 var xcodeDark = xcodeDarkInit();
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/components/CodeEditor/themes.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/components/CodeEditor/themes.js
 var themeExtensions = {
   dracula,
   githubLight,
@@ -41932,7 +42044,7 @@ function getCodeEditorThemeExtension(value) {
   return themeExtensions[value];
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/components/CodeEditor/renderHighlightedPlaceholder.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/components/CodeEditor/renderHighlightedPlaceholder.js
 var renderCache = /* @__PURE__ */ new Map();
 function buildRenderCacheKey(text2, options) {
   const slashNames = options.slashCommands?.map((command2) => command2.name).join(",") ?? "";
@@ -42014,7 +42126,7 @@ function renderHighlightedPlaceholderDom(text2, options) {
   return wrap;
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/components/CodeEditor/syntaxHighlightedPlaceholder.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/components/CodeEditor/syntaxHighlightedPlaceholder.js
 var SyntaxHighlightedPlaceholderWidget = class extends WidgetType {
   text;
   options;
@@ -42181,7 +42293,7 @@ function createSyntaxHighlightedPlaceholder(text2, options) {
   ];
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/components/CodeEditor/syntaxLinters.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/components/CodeEditor/syntaxLinters.js
 var LINT_IDLE_TIMEOUT_MS = 500;
 function scheduleIdle(callback, timeout) {
   if (typeof requestIdleCallback === "function") {
@@ -42221,7 +42333,7 @@ function createJsonSyntaxLinter() {
   return linter(jsonParseLinter());
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/components/CodeEditor/index.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/components/CodeEditor/index.js
 function clampSelection(docLength, selection2) {
   const maxOffset2 = Math.max(0, docLength);
   return {
@@ -43086,7 +43198,7 @@ function CodeEditor({ value, onChange: onChange2, language: language2 = "text", 
   }, children: "Edit value" }) : null] }) : null, selectionActionToolbarNode ? portalToBody(selectionActionToolbarNode) : null] });
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/http/substitute.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/http/substitute.js
 function substituteVariables2(text2, runtimeVars) {
   return substituteVariablesFromMap(text2, runtimeVars);
 }
@@ -43109,7 +43221,7 @@ function substituteKeyValueRows(rows, runtimeVars) {
   }));
 }
 
-// node_modules/.pnpm/@harborclient+sdk@1.1.29_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_6cedb8c58a7bb167327e43a8b58d23cb/node_modules/@harborclient/sdk/dist/http/resolveRequest.js
+// node_modules/.pnpm/@harborclient+sdk@1.1.32_@babel+runtime@8.0.0_@codemirror+search@6.7.1_@codemirror+them_0ad7190824e57416cff0677b103c141f/node_modules/@harborclient/sdk/dist/http/resolveRequest.js
 function hasUnsafeHeaderFieldChars(value) {
   for (let index = 0; index < value.length; index += 1) {
     const code = value.charCodeAt(index);
@@ -43353,42 +43465,374 @@ function buildCurlCommand(context) {
   return lines.join("\n");
 }
 
+// src/parseCurl.ts
+var CurlParseError = class extends Error {
+  /**
+   * Creates a parse failure with a user-facing message.
+   *
+   * @param message - Human-readable parse error.
+   */
+  constructor(message) {
+    super(message);
+    this.name = "CurlParseError";
+  }
+};
+function joinContinuations(input) {
+  return input.replace(/\r\n/g, "\n").split("\n").map((line) => line.trimEnd()).reduce((acc, line, index, lines) => {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      return acc;
+    }
+    const continues = line.endsWith("\\");
+    const segment = continues ? line.slice(0, -1).trimEnd() : trimmed;
+    const separator = acc && !acc.endsWith(" ") ? " " : "";
+    const next = `${acc}${separator}${segment}`;
+    if (continues && index < lines.length - 1) {
+      return next;
+    }
+    return next;
+  }, "").trim();
+}
+function tokenize2(command2) {
+  const tokens = [];
+  let current = "";
+  let quote = null;
+  let i3 = 0;
+  while (i3 < command2.length) {
+    const char = command2[i3];
+    if (quote === "'") {
+      if (char === "'") {
+        if (command2.slice(i3, i3 + 4) === `'\\''`) {
+          current += "'";
+          i3 += 4;
+          continue;
+        }
+        quote = null;
+        i3 += 1;
+        continue;
+      }
+      current += char;
+      i3 += 1;
+      continue;
+    }
+    if (quote === '"') {
+      if (char === "\\" && i3 + 1 < command2.length) {
+        current += command2[i3 + 1];
+        i3 += 2;
+        continue;
+      }
+      if (char === '"') {
+        quote = null;
+        i3 += 1;
+        continue;
+      }
+      current += char;
+      i3 += 1;
+      continue;
+    }
+    if (char === "'" || char === '"') {
+      quote = char;
+      i3 += 1;
+      continue;
+    }
+    if (/\s/.test(char)) {
+      if (current) {
+        tokens.push(current);
+        current = "";
+      }
+      i3 += 1;
+      continue;
+    }
+    current += char;
+    i3 += 1;
+  }
+  if (quote) {
+    throw new CurlParseError("Unbalanced quotes in curl command.");
+  }
+  if (current) {
+    tokens.push(current);
+  }
+  return tokens;
+}
+function takeArg(tokens, index, flag) {
+  const value = tokens[index + 1];
+  if (value === void 0) {
+    throw new CurlParseError(`Missing value for ${flag}.`);
+  }
+  return { value, nextIndex: index + 2 };
+}
+function splitHeader(header) {
+  const colon2 = header.indexOf(":");
+  if (colon2 === -1) {
+    return { key: header.trim(), value: "" };
+  }
+  return {
+    key: header.slice(0, colon2).trim(),
+    value: header.slice(colon2 + 1).trim()
+  };
+}
+function splitKeyValue(part) {
+  const eq = part.indexOf("=");
+  if (eq === -1) {
+    return { key: part, value: "" };
+  }
+  return {
+    key: part.slice(0, eq),
+    value: part.slice(eq + 1)
+  };
+}
+function basicAuthHeader(userpass) {
+  return `Basic ${globalThis.btoa(userpass)}`;
+}
+function inferBodyType(options) {
+  if (options.hasMultipart) {
+    return "multipart";
+  }
+  if (options.hasUrlEncoded) {
+    return "urlencoded";
+  }
+  if (!options.rawBody.trim()) {
+    return "none";
+  }
+  try {
+    JSON.parse(options.rawBody);
+    return "json";
+  } catch {
+    return "text";
+  }
+}
+function serializeUrlEncoded(rows) {
+  return JSON.stringify(rows);
+}
+function serializeMultipart(parts) {
+  return JSON.stringify(parts);
+}
+function parseCurl(input) {
+  const flattened2 = joinContinuations(input);
+  if (!flattened2) {
+    throw new CurlParseError("Curl command is empty.");
+  }
+  const tokens = tokenize2(flattened2);
+  if (tokens.length === 0) {
+    throw new CurlParseError("Curl command is empty.");
+  }
+  const first = tokens[0]?.toLowerCase();
+  if (first !== "curl") {
+    throw new CurlParseError("Command must start with curl.");
+  }
+  let method;
+  let url;
+  const headers = {};
+  const urlEncodedRows = [];
+  const formParts = [];
+  const rawBodies = [];
+  let hasMultipart = false;
+  let hasUrlEncoded = false;
+  let dataImpliesPost = false;
+  let i3 = 1;
+  while (i3 < tokens.length) {
+    const token = tokens[i3];
+    if (token === "-X" || token === "--request") {
+      const { value, nextIndex } = takeArg(tokens, i3, token);
+      method = value.toUpperCase();
+      i3 = nextIndex;
+      continue;
+    }
+    if (token === "-H" || token === "--header") {
+      const { value, nextIndex } = takeArg(tokens, i3, token);
+      const { key, value: headerValue } = splitHeader(value);
+      if (key) {
+        headers[key] = headerValue;
+      }
+      i3 = nextIndex;
+      continue;
+    }
+    if (token === "--url") {
+      const { value, nextIndex } = takeArg(tokens, i3, token);
+      url = value;
+      i3 = nextIndex;
+      continue;
+    }
+    if (token === "-u" || token === "--user") {
+      const { value, nextIndex } = takeArg(tokens, i3, token);
+      headers.Authorization = basicAuthHeader(value);
+      i3 = nextIndex;
+      continue;
+    }
+    if (token === "-d" || token === "--data" || token === "--data-raw" || token === "--data-binary" || token === "--data-ascii") {
+      const { value, nextIndex } = takeArg(tokens, i3, token);
+      rawBodies.push(value);
+      dataImpliesPost = true;
+      i3 = nextIndex;
+      continue;
+    }
+    if (token === "--data-urlencode") {
+      const { value, nextIndex } = takeArg(tokens, i3, token);
+      const { key, value: rowValue } = splitKeyValue(value);
+      if (key.trim()) {
+        urlEncodedRows.push({ key: key.trim(), value: rowValue, enabled: true });
+        hasUrlEncoded = true;
+        dataImpliesPost = true;
+      }
+      i3 = nextIndex;
+      continue;
+    }
+    if (token === "-F" || token === "--form" || token === "--form-string") {
+      const { value, nextIndex } = takeArg(tokens, i3, token);
+      const { key, value: partValue } = splitKeyValue(value);
+      if (key.trim()) {
+        hasMultipart = true;
+        dataImpliesPost = true;
+        if (partValue.startsWith("@")) {
+          formParts.push({
+            key: key.trim(),
+            value: "",
+            enabled: true,
+            type: "file",
+            files: [partValue.slice(1)]
+          });
+        } else {
+          formParts.push({
+            key: key.trim(),
+            value: partValue,
+            enabled: true,
+            type: "text",
+            files: []
+          });
+        }
+      }
+      i3 = nextIndex;
+      continue;
+    }
+    if (token === "-s" || token === "--silent" || token === "-S" || token === "--show-error" || token === "-L" || token === "--location" || token === "-k" || token === "--insecure" || token === "-g" || token === "--globoff" || token === "-v" || token === "--verbose" || token === "-i" || token === "--include" || token === "-compressed" || token === "--compressed") {
+      i3 += 1;
+      continue;
+    }
+    if (token === "-A" || token === "--user-agent" || token === "-b" || token === "--cookie" || token === "-c" || token === "--cookie-jar" || token === "-e" || token === "--referer" || token === "-m" || token === "--max-time" || token === "--connect-timeout" || token === "-o" || token === "--output" || token === "-w" || token === "--write-out" || token === "--proxy") {
+      i3 += 2;
+      continue;
+    }
+    if (token.startsWith("-")) {
+      const next = tokens[i3 + 1];
+      if (next && !next.startsWith("-") && next !== url) {
+        i3 += 2;
+      } else {
+        i3 += 1;
+      }
+      continue;
+    }
+    if (!url) {
+      url = token;
+      i3 += 1;
+      continue;
+    }
+    throw new CurlParseError(`Unexpected argument: ${token}`);
+  }
+  if (!url) {
+    throw new CurlParseError("Curl command is missing a URL.");
+  }
+  let body = "";
+  if (hasMultipart) {
+    body = serializeMultipart(formParts);
+  } else if (hasUrlEncoded) {
+    body = serializeUrlEncoded(urlEncodedRows);
+  } else if (rawBodies.length > 0) {
+    body = rawBodies.join("&");
+  }
+  const bodyType = inferBodyType({
+    hasMultipart,
+    hasUrlEncoded,
+    rawBody: hasMultipart || hasUrlEncoded ? body : rawBodies.join("&")
+  });
+  if (!method) {
+    method = dataImpliesPost ? "POST" : "GET";
+  }
+  const payload = {
+    method,
+    url,
+    headers,
+    body,
+    bodyType: bodyType === "none" && !body ? "none" : bodyType
+  };
+  return payload;
+}
+
 // src/CurlTab.tsx
 function CurlTab({ context, hc }) {
   const command2 = useMemo(() => buildCurlCommand(context), [context]);
+  const [draftText, setDraftText] = useState(command2);
   const [copyError, setCopyError] = useState(null);
+  const [updateError, setUpdateError] = useState(null);
+  const [updating, setUpdating] = useState(false);
+  useEffect(() => {
+    setDraftText(command2);
+    setUpdateError(null);
+  }, [command2]);
   const handleCopy = async () => {
     setCopyError(null);
     try {
-      await copyToClipboard(hc, command2, { toast: "Copied to clipboard" });
+      await copyToClipboard(hc, draftText, { toast: "Copied to clipboard" });
     } catch {
       setCopyError("Failed to copy");
     }
   };
+  const handleUpdate = async () => {
+    setUpdateError(null);
+    setUpdating(true);
+    try {
+      const payload = parseCurl(draftText);
+      await hc.host.applyRequestDraft(payload);
+      hc.ui.showToast("Request updated from cURL");
+    } catch (error) {
+      const message = error instanceof CurlParseError ? error.message : error instanceof Error ? error.message : "Failed to update request from cURL";
+      setUpdateError(message);
+    } finally {
+      setUpdating(false);
+    }
+  };
+  const dirty = draftText !== command2;
+  const errorMessage = updateError ?? copyError;
+  const errorId = updateError ? "curl-update-error" : "curl-copy-error";
   return /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-2", style: { minHeight: "320px" }, children: [
-    /* @__PURE__ */ jsx("div", { className: "flex shrink-0 items-center justify-end", children: /* @__PURE__ */ jsx(
-      Button,
-      {
-        variant: "secondary",
-        "aria-label": "Copy cURL command",
-        onClick: () => {
-          void handleCopy();
-        },
-        children: "Copy"
-      }
-    ) }),
+    /* @__PURE__ */ jsxs("div", { className: "flex shrink-0 items-center justify-end gap-2", children: [
+      /* @__PURE__ */ jsx(
+        Button,
+        {
+          variant: "secondary",
+          "aria-label": "Update request from cURL command",
+          disabled: updating || !dirty,
+          onClick: () => {
+            void handleUpdate();
+          },
+          children: updating ? "Updating\u2026" : "Update"
+        }
+      ),
+      /* @__PURE__ */ jsx(
+        Button,
+        {
+          variant: "secondary",
+          "aria-label": "Copy cURL command",
+          onClick: () => {
+            void handleCopy();
+          },
+          children: "Copy"
+        }
+      )
+    ] }),
     /* @__PURE__ */ jsx(
       CodeEditor,
       {
-        value: command2,
+        value: draftText,
+        onChange: setDraftText,
         language: "shell",
-        readOnly: true,
         minHeight: "280px",
         className: "flex-1",
-        "aria-label": "cURL command"
+        "aria-label": "cURL command",
+        "aria-invalid": Boolean(updateError),
+        "aria-describedby": errorMessage ? errorId : void 0
       }
     ),
-    /* @__PURE__ */ jsx(FieldError, { id: "curl-copy-error", roleAlert: true, children: copyError })
+    /* @__PURE__ */ jsx(FieldError, { id: errorId, roleAlert: true, children: errorMessage })
   ] });
 }
 
@@ -43409,7 +43853,7 @@ export {
 @fortawesome/free-solid-svg-icons/index.mjs:
 @fortawesome/fontawesome-svg-core/index.mjs:
   (*!
-   * Font Awesome Free 7.3.0 by @fontawesome - https://fontawesome.com
+   * Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com
    * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
    * Copyright 2026 Fonticons, Inc.
    *)
